@@ -109,6 +109,7 @@ export class DoctorHeader extends CustomerAuthGuard {
 
     this.doctorHomeService.getDoctorProfile(entries)
       .subscribe(doctorProfile => {
+        console.log("Profile clicked" , doctorProfile)
         this.doctorProfile = doctorProfile;
       },
       error => {
@@ -119,6 +120,7 @@ export class DoctorHeader extends CustomerAuthGuard {
 
   editDoctorProfile(event: any) {
     console.log("Its here", this.doctorProfile)
+    
 
     this.doctorHomeService.updateDoctorProfile(this.doctorProfile)
       .subscribe(response => {
@@ -149,6 +151,8 @@ export class DoctorHeader extends CustomerAuthGuard {
 
   logOut() {
     sessionStorage.removeItem("customerData");
+    window.sessionStorage.clear();
+    location.reload(true);
     this.rout.navigate(['/login']);
   }
 

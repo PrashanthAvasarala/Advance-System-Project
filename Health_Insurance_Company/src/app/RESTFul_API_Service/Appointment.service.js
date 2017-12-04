@@ -82,6 +82,37 @@ var AppointmentService = (function () {
             return (error.status === 404) ? Rx_1.Observable.throw(error._body) : null;
         });
     };
+    AppointmentService.prototype.writeReviewForDoctor = function (userData) {
+        return this.http.put("http://localhost:8080/ASP/HealthDB/customer/addReview", userData)
+            .map(function (response) {
+            return response.json();
+        })
+            .catch(function (error) {
+            //console.log(error);
+            //console.log(error._body)            
+            return (error.status === 404) ? Rx_1.Observable.throw(error._body) : null;
+        });
+    };
+    AppointmentService.prototype.listOfAppointments = function (data) {
+        return this.http.post("http://localhost:8080/ASP/HealthDB/customer/patientAppointmentList", data)
+            .map(function (response) {
+            return response.json();
+        });
+    };
+    /* Delete Method doesn't work in Angular we need to fool around it with request method
+     "https://stackoverflow.com/a/40929709/8228918"
+      "https://hassantariqblog.wordpress.com/2016/12/03/angular2-http-delete-using-observable-in-angular-2-application/"*/
+    AppointmentService.prototype.deleteAppointment = function (data) {
+        //console.log("Hello I'm in receving  class",data);
+        this.options = new http_1.RequestOptions({
+            body: data,
+            method: http_1.RequestMethod.Delete
+        });
+        return this.http.request("http://localhost:8080/ASP/HealthDB/customer/delete-appointment", this.options)
+            .map(function (response) {
+            return response.json();
+        });
+    };
     return AppointmentService;
 }());
 AppointmentService = __decorate([

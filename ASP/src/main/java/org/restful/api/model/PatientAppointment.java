@@ -28,8 +28,24 @@ public class PatientAppointment {
 	1) Take input date as string store in appointDate.
     2) Using appointDate value convert in to Date Date by setter and getters*/
 	private String appointDate;
+	private String doctorName;
+	private String email;
 	
 	
+	
+	
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getDoctorName() {
+		return doctorName;
+	}
+	public void setDoctorName(String doctorName) {
+		this.doctorName = doctorName;
+	}
 	public Date getDateFromDb() {
 		return dateFromDb;
 	}

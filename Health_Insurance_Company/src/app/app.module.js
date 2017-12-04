@@ -32,6 +32,8 @@ var Customer_Home_View_1 = require("./Customer/Customer_Home_View");
 var Customer_appointment_1 = require("./Customer/Customer_appointment");
 var Doctor_NearBy_1 = require("./Customer/Doctor_NearBy");
 var Customer_MakeAppointment_1 = require("./Customer/Customer_MakeAppointment");
+var Add_Review_1 = require("./Customer/Add_Review");
+var Delete_Appointment_1 = require("./Customer/Delete_Appointment");
 /* Doctor-View*/
 var Doctor_Header_component_1 = require("./Doctor/Doctor_Header.component");
 var Doctor_Footer_component_1 = require("./Doctor/Doctor_Footer.component");
@@ -61,7 +63,9 @@ var appRoutes = [
             // From Login.component.ts it will come to  router.navigate(['home'])--> CustomerHomeView --> CustomerAuthGuard = true
             { path: 'home/:', component: Customer_Home_View_1.CustomerHomeView },
             { path: 'home/:id/appointment', component: Customer_appointment_1.Appointment },
-            { path: 'home/:id/appointment/docAppoint', component: Customer_MakeAppointment_1.AppointmentModal }
+            { path: 'home/:id/delete-appointment', component: Delete_Appointment_1.DeleteAppoint },
+            { path: 'home/:id/appointment/docAppoint', component: Customer_MakeAppointment_1.AppointmentModal },
+            { path: 'home/:id/appointment/docAppoint/:docId/addReview', component: Add_Review_1.ReviewModal },
         ]
     },
     /* Doctor-View*/
@@ -107,6 +111,8 @@ AppModule = __decorate([
             Customer_appointment_1.Appointment,
             Doctor_NearBy_1.DoctorNearBy,
             Customer_MakeAppointment_1.AppointmentModal,
+            Add_Review_1.ReviewModal,
+            Delete_Appointment_1.DeleteAppoint,
             /*Doctor-View*/
             Doctor_Header_component_1.DoctorHeader,
             Doctor_Footer_component_1.DoctorFooter,

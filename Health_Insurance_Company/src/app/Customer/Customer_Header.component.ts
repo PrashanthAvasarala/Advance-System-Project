@@ -9,7 +9,7 @@ import { CustomerAuthGuard } from './Customer_AuthGuard';
 @Component({
   selector: 'Customer-Header',
   templateUrl: './Customer_Header.html',
-  styleUrls: ['./../DefaultHome/Header.css'],
+  styleUrls: ['./Customer_Header.css'],
 
 
 })
@@ -42,6 +42,8 @@ export class CustomerHeader extends CustomerAuthGuard {
 
   logOut() {
     sessionStorage.removeItem("userData");
+    window.sessionStorage.clear();
+    location.reload(true);
     this.rout.navigate(['/login']);
   }
 

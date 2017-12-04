@@ -13,8 +13,9 @@
 
       <label>Choose Date and Time :
          <datetime   [(ngModel)]="date"  [timepicker]="timepickerOpts"
-                     [datepicker]= "datepickerOpts" [hasClearButton]="true">
-         </datetime>
+                     [datepicker]= "datepickerOpts" [hasClearButton]="true"></datetime>
+         
+         
        </label>
 
       <h5><strong><i>Selected Time slot: </i></strong> {{getDate(date) | date: "medium"}}</h5>

@@ -28,12 +28,15 @@ var DoctorNearBy = (function (_super) {
         _this.docList = [];
         return _this;
     }
-    DoctorNearBy.prototype.setSelectedDoctorMemberId = function (id, name) {
+    DoctorNearBy.prototype.setSelectedDoctorMemberId = function (id, name, option) {
         /* console.log("Doctor Id" ,id)
         console.log("I'm in DoctorNearBy " ,this.customerData); */
         console.log(this.carrier);
         this.apponit.setDoctorAndPaitentDetails(id, name, this.carrier, this.customerData);
-        this.rout.navigate(['home/' + this.customerData.memberId + '/appointment/docAppoint'], { queryParams: { doc_id: id } });
+        if (option === 'Appointment')
+            this.rout.navigate(['home/' + this.customerData.memberId + '/appointment/docAppoint'], { queryParams: { doc_id: id } });
+        else
+            this.rout.navigate(['home/' + this.customerData.memberId + '/appointment/docAppoint/' + id + '/addReview']);
     };
     return DoctorNearBy;
 }(Customer_AuthGuard_1.CustomerAuthGuard));

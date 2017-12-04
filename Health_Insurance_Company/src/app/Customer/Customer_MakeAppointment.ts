@@ -22,17 +22,22 @@ import { AppointmentService } from '../RESTFul_API_Service/Appointment.service';
 export class AppointmentModal  {
 
   date: Date;  
+  booke : string[] = ['25 11 2017' , '02 12 2017'];
   datepickerOpts: any = {     /* startDate: new Date(2016, 5, 10), */
                               autoclose: true, todayBtn: 'linked',
                               todayHighlight: true, assumeNearbyYear: true,
-                              format: 'D, d MM yyyy', icon: 'fa fa-calendar'
+                              format: 'd MM yyyy', icon: 'fa fa-calendar',
+                              datesDisabled : this.booke, clearBtn : true,
+                              startDate : new Date() , showOnFocus: true,
+                              endDate : new Date(2018,2)
                         };
 
   //If we remove type casting <any> it will throw error
   timepickerOpts: any[] = <any>{
     icon: 'fa fa-clock-o',
     showMeridian: false,
-    minuteStep: 1
+    minuteStep: 1,
+    defaultTime : 'current'
   }
   /* @Input('docProfileEvent') profileList = <any>[] ; */
   /* @Output() docProfileEvent = <any>[];
@@ -43,7 +48,6 @@ export class AppointmentModal  {
   patientCarrier:any;
   patientData = <any>{};
   consultingReason :any = '';
-
   valuesEntered:boolean;
   
 
@@ -64,12 +68,14 @@ export class AppointmentModal  {
               this.patientData = result[3];
             })
            
-            
+          
 
      }
         
+     
+     
      bookAppoint(){
-           
+      
       if(this.date && this.consultingReason){
         var entries = <any> {}
             entries = {
@@ -83,24 +89,28 @@ export class AppointmentModal  {
             doctorMemberId: this.doctorMemberId
           }
 
-          
+          if(this.date.getTime() >= Date.now()){
           console.log(entries);
           this.appoint.bookAppointmentForDoctor(entries)
           .subscribe(
             (result: any) => {
               window.alert(result);
-               (result)? this.route.navigate(['home/'+this.doctorMemberId]) : null;
+               (result)? this.route.navigate(['home/'+this.patientData.memberId]) : null;
                          
             },
             (err: any) => {
               window.alert(err);
               if(err){
                 this.consultingReason.clear();
-                this.route.navigate(['home/'+this.doctorMemberId]);
+                this.route.navigate(['home/'+this.patientData.memberId]);
               }
               
             }
           );
+        }
+        else{
+          window.alert ("You cannot book the Appointment for the past day");
+        }
       }
 
       else{
@@ -115,10 +125,13 @@ export class AppointmentModal  {
     
 
     getDate(dt: Date): number {
-       return dt && dt.getTime();
+      return dt && dt.getTime();      
      }
 
 
 
 
 }
+
+
+

@@ -31,17 +31,20 @@ export class DoctorNearBy extends CustomerAuthGuard {
           }      
 
      
-        setSelectedDoctorMemberId(id:any , name:any){
+        setSelectedDoctorMemberId(id:any , name:any , option : string){
             
             /* console.log("Doctor Id" ,id)
             console.log("I'm in DoctorNearBy " ,this.customerData); */
             console.log(this.carrier);
             this.apponit.setDoctorAndPaitentDetails(id,name,this.carrier,this.customerData);
+            if( option === 'Appointment')
             this.rout.navigate(['home/'+this.customerData.memberId+'/appointment/docAppoint'],{ queryParams: { doc_id: id} } );
+            else
+            this.rout.navigate(['home/'+this.customerData.memberId+'/appointment/docAppoint/'+id+'/addReview']);
 
           }
         
-
+          
 
 
       

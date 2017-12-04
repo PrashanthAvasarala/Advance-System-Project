@@ -17,16 +17,21 @@ var AppointmentModal = (function () {
         var _this = this;
         this.route = route;
         this.appoint = appoint;
+        this.booke = ['25 11 2017', '02 12 2017'];
         this.datepickerOpts = {
             autoclose: true, todayBtn: 'linked',
             todayHighlight: true, assumeNearbyYear: true,
-            format: 'D, d MM yyyy', icon: 'fa fa-calendar'
+            format: 'd MM yyyy', icon: 'fa fa-calendar',
+            datesDisabled: this.booke, clearBtn: true,
+            startDate: new Date(), showOnFocus: true,
+            endDate: new Date(2018, 2)
         };
         //If we remove type casting <any> it will throw error
         this.timepickerOpts = {
             icon: 'fa fa-clock-o',
             showMeridian: false,
-            minuteStep: 1
+            minuteStep: 1,
+            defaultTime: 'current'
         };
         this.patientData = {};
         this.consultingReason = '';
@@ -57,18 +62,23 @@ var AppointmentModal = (function () {
                 reason: this.consultingReason,
                 doctorMemberId: this.doctorMemberId
             };
-            console.log(entries);
-            this.appoint.bookAppointmentForDoctor(entries)
-                .subscribe(function (result) {
-                window.alert(result);
-                (result) ? _this.route.navigate(['home/' + _this.doctorMemberId]) : null;
-            }, function (err) {
-                window.alert(err);
-                if (err) {
-                    _this.consultingReason.clear();
-                    _this.route.navigate(['home/' + _this.doctorMemberId]);
-                }
-            });
+            if (this.date.getTime() >= Date.now()) {
+                console.log(entries);
+                this.appoint.bookAppointmentForDoctor(entries)
+                    .subscribe(function (result) {
+                    window.alert(result);
+                    (result) ? _this.route.navigate(['home/' + _this.patientData.memberId]) : null;
+                }, function (err) {
+                    window.alert(err);
+                    if (err) {
+                        _this.consultingReason.clear();
+                        _this.route.navigate(['home/' + _this.patientData.memberId]);
+                    }
+                });
+            }
+            else {
+                window.alert("You cannot book the Appointment for the past day");
+            }
         }
         else {
             window.alert("You have missed some fields please check and enter properly");

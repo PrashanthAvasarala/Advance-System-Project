@@ -7,6 +7,7 @@
   font: bold 16px sans-serif;
   padding: 55px 50px;
   margin-top: 60px;
+  height : 290px;
 }
 
 .footer-distributed .footer-left,
@@ -129,7 +130,7 @@
 }
 
 .footer-distributed .footer-icons {
-  margin-top: 25px;
+   margin-top: -30px;
 }
 
 .footer-distributed .footer-icons a {

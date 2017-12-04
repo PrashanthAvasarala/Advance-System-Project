@@ -98,6 +98,7 @@ var DoctorHeader = (function (_super) {
         };
         this.doctorHomeService.getDoctorProfile(entries)
             .subscribe(function (doctorProfile) {
+            console.log("Profile clicked", doctorProfile);
             _this.doctorProfile = doctorProfile;
         }, function (error) {
             _this.errorMessage = error;
@@ -129,6 +130,8 @@ var DoctorHeader = (function (_super) {
     };
     DoctorHeader.prototype.logOut = function () {
         sessionStorage.removeItem("customerData");
+        window.sessionStorage.clear();
+        location.reload(true);
         this.rout.navigate(['/login']);
     };
     return DoctorHeader;

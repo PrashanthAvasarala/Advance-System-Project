@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers } from '@angular/http';
+import { Http, Response, Headers, RequestMethod, RequestOptions } from '@angular/http';
 
 
 import 'rxjs/add/operator/map';
@@ -17,6 +17,7 @@ export class AppointmentService {
    carrier:any = null;
    patientData = <any>{};
    appointTable = <any>[]; // [doctorId , patientData]
+   options: RequestOptions;
 
 
     constructor(private http : Http ){
@@ -89,9 +90,9 @@ export class AppointmentService {
         //console.log("hi" + userData2 )
         return this.http.post("http://localhost:8080/ASP/HealthDB/customer/bookAppoint",userData2) 
         .map(
-           (response:Response) => {
+           (response:any) => {
                  //console.log("Inserted Successfully" ,response )
-                    return response._body;              
+                    return response._body;             
             }                   
          )
          .catch (
@@ -102,8 +103,55 @@ export class AppointmentService {
 
               }            
           );
-       
+      }
 
+      writeReviewForDoctor(userData: any):Observable<Response>{
+
+        return this.http.put("http://localhost:8080/ASP/HealthDB/customer/addReview",userData)
+                .map(
+                  (response:Response) => {
+                        return response.json();
+                  }
+                )
+                .catch (
+                  (error: any ) => {
+                     //console.log(error);
+                     //console.log(error._body)            
+                     return (error.status === 404)? Observable.throw(error._body) : null ;
+        
+                      }            
+                  );
+                    
+      }
+
+
+      listOfAppointments(data : any) : Observable<Response>{
+
+        return this.http.post("http://localhost:8080/ASP/HealthDB/customer/patientAppointmentList",data)
+        .map(
+          (response:Response) => {
+                return response.json();
+          }
+        )
+        
+      }
+
+     /* Delete Method doesn't work in Angular we need to fool around it with request method
+      "https://stackoverflow.com/a/40929709/8228918" 
+       "https://hassantariqblog.wordpress.com/2016/12/03/angular2-http-delete-using-observable-in-angular-2-application/"*/
+
+      deleteAppointment(data: any): Observable<Response>{
+        //console.log("Hello I'm in receving  class",data);
+         this.options = new RequestOptions({ 
+          body: data,
+          method: RequestMethod.Delete
+        });
+        return this.http.request("http://localhost:8080/ASP/HealthDB/customer/delete-appointment",this.options)
+        .map(
+          (response:Response) => {
+                return response.json();
+          }
+        )
 
       }
         

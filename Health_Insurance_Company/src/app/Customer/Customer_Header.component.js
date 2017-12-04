@@ -37,6 +37,8 @@ var CustomerHeader = (function (_super) {
     /* Log out from the session and clearing the storage */
     CustomerHeader.prototype.logOut = function () {
         sessionStorage.removeItem("userData");
+        window.sessionStorage.clear();
+        location.reload(true);
         this.rout.navigate(['/login']);
     };
     return CustomerHeader;
@@ -45,7 +47,7 @@ CustomerHeader = __decorate([
     core_1.Component({
         selector: 'Customer-Header',
         templateUrl: './Customer_Header.html',
-        styleUrls: ['./../DefaultHome/Header.css'],
+        styleUrls: ['./Customer_Header.css'],
     }),
     __metadata("design:paramtypes", [router_1.Router])
 ], CustomerHeader);

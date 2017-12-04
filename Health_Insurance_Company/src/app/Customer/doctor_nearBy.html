@@ -48,10 +48,10 @@
         <td style="padding : 0 0 0 100px;">
             
             <p>
-                <button type="button"  class="btn btn-success"  (click) = "setSelectedDoctorMemberId(docList.memberId , docList.doctorName )"> Make Appointment</button>
+                <button type="button"  class="btn btn-success"  (click) = "setSelectedDoctorMemberId(docList.memberId , docList.doctorName , 'Appointment')"> Make Appointment</button>
             </p>
             <p>
-                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#largeModal"> Add Review </button>
+                <button type="button" class="btn btn-info" (click) = "setSelectedDoctorMemberId(docList.memberId , docList.doctorName , 'Review')"  > Add Review </button>
             </p>
             
         </td>

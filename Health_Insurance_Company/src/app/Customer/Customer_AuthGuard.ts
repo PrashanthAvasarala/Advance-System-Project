@@ -43,8 +43,10 @@ export class CustomerAuthGuard implements CanActivate {
            } */
           
           /* If No data is retrived or session / window is closed open from here */
-              this.router.navigate(['login']);
-              return false;
+              
+                 this.router.navigate(['login']);
+                 return false;
+                 
           
     }
 

@@ -3,6 +3,7 @@ package org.restful.api.model;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -17,7 +18,28 @@ public class PatientReviews {
 	private String patientName;
 	private String doctorName;
 	private String errMessage;
+	private String date;
+	private Date dateIntoDb;
 	
+	public String getDate() {
+		return date;
+	}
+	public void setDate(String date) throws ParseException {
+		this.date = date;
+		
+	}
+	
+		
+	public Date getDateIntoDb() {
+		return dateIntoDb;
+	}
+	public void setDateIntoDb(String dateIntoDb) throws ParseException {
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+			formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+			this.reviewDate = formatter.parse(dateIntoDb);
+				System.out.println("I'm in model class" + this.reviewDate);
+	}
 	public int getMemberId() {
 		return memberId;
 	}

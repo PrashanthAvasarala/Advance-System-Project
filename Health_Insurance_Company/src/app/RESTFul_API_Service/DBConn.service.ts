@@ -34,7 +34,7 @@ export class DBConnection {
                                 if(response.status === 404) we are getting error for status code 404 not found on console that is the reason for catch block
                                 return response.json(); */
 
-                          (response:Response) => {
+                          (response:any) => {
                                 console.log(response);
                                 /* console.log(response._body); */
                                  return response._body;

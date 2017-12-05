@@ -154,5 +154,18 @@ export class AppointmentService {
         )
 
       }
+
+      blockedDates(data : any): Observable<Response>{
+
+        return this.http.post("http://localhost:8080/ASP/HealthDB/customer/blocked-dates",data)
+        .map(
+          (response:Response) => {
+                return response.json();
+          }
+        )
+
+      }
+
+      
         
 }

@@ -39,7 +39,7 @@ export class ReviewModal{
        minuteStep: 1,
        defaultTime : 'current'
        }     
-    
+       patientAppointList = <any>{}; 
 
 
     
@@ -72,32 +72,63 @@ export class ReviewModal{
 
                    if(this.date && this.reviewText){
                          if(this.date.getTime() <= Date.now()){
-
-                                var entries : any = {
-                                    memberId : this.patientData.memberId,
-                                    doctorMemberId : this.doctorMemberId,
-                                    review : this.reviewText,
-                                    date : this.date.toISOString(),
-                                    rating : this.overAllRating
-                                }
-                      
-                                 //console.log(entries)
-                                this.appoint.writeReviewForDoctor(entries)
-                                .subscribe(
-                                    (result:any)=>{
-                                        //console.log("I'm in Add_review class ",result);
-                                        window.alert(result.errMessage);
-                                        this.date = null;
-                                        this.reviewText = null;                                                                   
+                                 var temp = null;
+                                 var data = {
+                                    memberId : this.patientData.memberId,                                    
+                                 }
+                                  
+                                 this.appoint.listOfAppointments(data)
+                                 .subscribe(
+                                    (gotBackResult:any)=>{
+                                        
+                                        this.patientAppointList = gotBackResult.appointmentsList;
+                                        for(var singleAppointment of this.patientAppointList){
+                                            var selectedDate = this.date.setHours(0,0,0,0);
+                                            var appointmentAttendedDate = new Date(singleAppointment.dateFromDb).setHours(0,0,0,0);
+                                            
+                                            if((singleAppointment.doctorMemberId === this.doctorMemberId) && (appointmentAttendedDate.valueOf() === selectedDate.valueOf())){
+                                                temp = true;
+                                                break;
+                                            }else{
+                                                temp = false;
+                                            }
+                                        }                                                                                                     
                                     });
 
+                                    if(temp){
 
-                              }else{
+                                        var entries : any = {
+                                            memberId : this.patientData.memberId,
+                                            doctorMemberId : this.doctorMemberId,
+                                            review : this.reviewText,
+                                            date : this.date.toISOString(),
+                                            rating : this.overAllRating
+                                        }
+                              
+                                         //console.log(entries)
+                                        this.appoint.writeReviewForDoctor(entries)
+                                        .subscribe(
+                                            (result:any)=>{
+                                                //console.log("I'm in Add_review class ",result);
+                                                window.alert(result.errMessage);
+                                                this.date = null;
+                                                this.reviewText = null;   
+                                                this.route.navigate(['home/'+this.patientData.memberId]);                                                                
+                                            });
+                                    }else{
+                                        window.alert("The Appointment date you have entered doesn't match with our database"+
+                                                     " Or you did not consult this doctor , With out consulting the doctor,"+
+                                                     "you cannot give the review ");
+                                        this.date = null;
+                                        this.reviewText = null;   
+                                        this.route.navigate(['home/'+this.patientData.memberId]);                                   
+                                     }
+                         }else{
                               window.alert("You cannot give review before itself without consulting doctor");
                               }
                      }else{
                          window.alert("You have missed some fields please check and enter properly")
-                     }
+                          }
         }
 
 }

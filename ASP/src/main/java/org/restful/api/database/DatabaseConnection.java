@@ -1,4 +1,5 @@
 package org.restful.api.database;
+import org.restful.api.ASP.EncryptAndDecryptPassword;
 import org.restful.api.model.Profile;
 import org.restful.api.model.Specialty;
 
@@ -195,7 +196,8 @@ public class DatabaseConnection {
 			    	profile.setZipCode(rs.getInt("zip_code"));
 			    	profile.setState(rs.getString("state"));
 			    	profile.setEmail(rs.getString("email"));
-			    	profile.setPassword(rs.getString("password"));
+			    	String password = EncryptAndDecryptPassword.decrypt(rs.getString("password"));
+			    	profile.setPassword(password);
 			    	
 			    				    	
 			    }

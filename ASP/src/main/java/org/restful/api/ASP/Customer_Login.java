@@ -109,7 +109,20 @@ public class Customer_Login {
 					     
 		  }
 	 
-	 
+	 @Path("blocked-dates")
+	 @POST
+		
+		//API for deleting appointment for selected doctor and for selected date
+		public Response blockedAppoitments(PatientAppointment profile) throws Exception {
+			
+		 PatientAppointment appoint =  AppointmentsDb.blockedAppoint(profile);
+		 
+			return(appoint.getErrMessage() == null )?		
+				
+				 Response.status(200).entity(appoint).build() : Response.status(400).entity(appoint).build();
+			
+					     
+		  }
 	
 }
 	

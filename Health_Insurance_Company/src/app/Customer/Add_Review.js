@@ -33,6 +33,7 @@ var ReviewModal = (function () {
             minuteStep: 1,
             defaultTime: 'current'
         };
+        this.patientAppointList = {};
         this.appoint.getDoctorAndPaitentMemberId()
             .subscribe(function (result) {
             _this.doctorMemberId = result[0];
@@ -52,21 +53,52 @@ var ReviewModal = (function () {
         this.overAllRating /= 3;
         if (this.date && this.reviewText) {
             if (this.date.getTime() <= Date.now()) {
-                var entries = {
+                var temp = null;
+                var data = {
                     memberId: this.patientData.memberId,
-                    doctorMemberId: this.doctorMemberId,
-                    review: this.reviewText,
-                    date: this.date.toISOString(),
-                    rating: this.overAllRating
                 };
-                //console.log(entries)
-                this.appoint.writeReviewForDoctor(entries)
-                    .subscribe(function (result) {
-                    //console.log("I'm in Add_review class ",result);
-                    window.alert(result.errMessage);
-                    _this.date = null;
-                    _this.reviewText = null;
+                this.appoint.listOfAppointments(data)
+                    .subscribe(function (gotBackResult) {
+                    _this.patientAppointList = gotBackResult.appointmentsList;
+                    for (var _i = 0, _a = _this.patientAppointList; _i < _a.length; _i++) {
+                        var singleAppointment = _a[_i];
+                        var selectedDate = _this.date.setHours(0, 0, 0, 0);
+                        var appointmentAttendedDate = new Date(singleAppointment.dateFromDb).setHours(0, 0, 0, 0);
+                        if ((singleAppointment.doctorMemberId === _this.doctorMemberId) && (appointmentAttendedDate.valueOf() === selectedDate.valueOf())) {
+                            temp = true;
+                            break;
+                        }
+                        else {
+                            temp = false;
+                        }
+                    }
                 });
+                if (temp) {
+                    var entries = {
+                        memberId: this.patientData.memberId,
+                        doctorMemberId: this.doctorMemberId,
+                        review: this.reviewText,
+                        date: this.date.toISOString(),
+                        rating: this.overAllRating
+                    };
+                    //console.log(entries)
+                    this.appoint.writeReviewForDoctor(entries)
+                        .subscribe(function (result) {
+                        //console.log("I'm in Add_review class ",result);
+                        window.alert(result.errMessage);
+                        _this.date = null;
+                        _this.reviewText = null;
+                        _this.route.navigate(['home/' + _this.patientData.memberId]);
+                    });
+                }
+                else {
+                    window.alert("The Appointment date you have entered doesn't match with our database" +
+                        " Or you did not consult this doctor , With out consulting the doctor," +
+                        "you cannot give the review ");
+                    this.date = null;
+                    this.reviewText = null;
+                    this.route.navigate(['home/' + this.patientData.memberId]);
+                }
             }
             else {
                 window.alert("You cannot give review before itself without consulting doctor");

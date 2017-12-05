@@ -76,6 +76,8 @@ public class MyResource {
 
 	public Response addProfile(Profile profile) throws Exception {
 		
+		String encryptedPassword = EncryptAndDecryptPassword.encrypt(profile.getPassword());
+		profile.setPassword(encryptedPassword);
 		
 		if(profile.getUser().equalsIgnoreCase("Customer")){
 		      
@@ -123,7 +125,11 @@ public class MyResource {
 		
 		   /*204 No Content - There is no content to send for this request ,
 		    404 Not found,
-		   200 OK The request has succeeded. The meaning of a success varies depending on the HTTP method GET , POST*/	   
+		   200 OK The request has succeeded. The meaning of a success varies depending on the HTTP method GET , POST*/	
+		      // Symmetric Algorithm: Use AES/AESWrap block cipher; and
+		      // Encrypt Password for security reasons
+				String encryptedPassword = EncryptAndDecryptPassword.encrypt(profile.getPassword());
+				profile.setPassword(encryptedPassword);
 		 
 		   Profile userData = DatabaseConnection.getUserProfile(profile);			   
 		   

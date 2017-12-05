@@ -6,6 +6,7 @@ package org.restful.api.model;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -30,10 +31,18 @@ public class PatientAppointment {
 	private String appointDate;
 	private String doctorName;
 	private String email;
+	private List<Date> listOfBlockedDates;
 	
 	
 	
 	
+	
+	public List<Date> getListOfBlockedDates() {
+		return listOfBlockedDates;
+	}
+	public void setListOfBlockedDates(List<Date> listOfBlockedDates) {
+		this.listOfBlockedDates = listOfBlockedDates;
+	}
 	public String getEmail() {
 		return email;
 	}

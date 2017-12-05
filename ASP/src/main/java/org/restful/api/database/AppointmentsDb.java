@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
+
 import org.restful.api.Email.DeleteEmailAppoint;
 import org.restful.api.model.AllPatientDetails;
 import org.restful.api.model.DoctorsProfile;
@@ -436,4 +437,47 @@ public class AppointmentsDb {
     	
     	
     } 
+    
+    
+    public static PatientAppointment blockedAppoint(PatientAppointment profile) throws Exception{
+    	
+    	      PatientAppointment appointment = new PatientAppointment();
+    	      List<java.util.Date> blockedDates = new ArrayList<>();
+    	  
+    	      try {
+	               	 con = DatabaseConnection.getCon();
+		             PreparedStatement pst = con.prepareStatement("select appointment_date FROM patient_appointments WHERE  doctor_member_id = ? ");
+		             pst.setInt(1, profile.getDoctorMemberId());
+		             ResultSet rs = pst.executeQuery();	
+		             
+		             while(rs.next()){
+		        	
+		        	   appointment.setDateFromDb(rs.getTimestamp("appointment_date"));
+		        	   System.out.println(rs.getTimestamp("appointment_date"));
+		        	   System.out.println(appointment.getDateFromDb());
+		        	   
+		        	   blockedDates.add(appointment.getDateFromDb()); 
+		        	   
+		             }
+ 			  
+               }catch (SQLException e) {				
+				     System.err.println("Got an exception!! in patient_appointments ");
+				     //System.err.println(profile.getDate());
+			         System.err.println(e.getMessage());			    
+			      }
+    	  
+    	      
+    	      if(blockedDates.size() == 0){
+    	    	  appointment.setErrMessage("No Dates Found for this doctor");
+    	      }else{
+    	    	  
+    	    	  appointment.setListOfBlockedDates(blockedDates);
+    	      }
+		return appointment;
+    	
+    }
+    
+    
+    
+    
 }

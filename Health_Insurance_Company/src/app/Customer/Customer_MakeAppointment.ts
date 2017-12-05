@@ -22,24 +22,26 @@ import { AppointmentService } from '../RESTFul_API_Service/Appointment.service';
 export class AppointmentModal  {
 
   date: Date;  
-  booke : string[] = ['25 11 2017' , '02 12 2017'];
-  datepickerOpts: any = {     /* startDate: new Date(2016, 5, 10), */
-                              autoclose: true, todayBtn: 'linked',
-                              todayHighlight: true, assumeNearbyYear: true,
-                              format: 'd MM yyyy', icon: 'fa fa-calendar',
-                              datesDisabled : this.booke, clearBtn : true,
-                              startDate : new Date() , showOnFocus: true,
-                              endDate : new Date(2018,2)
-                        };
+  //booke : string[] = ['25 11 2017' , '02 12 2017'];
+   booke : string[] = [];
+   blocks : Date[] = [];
+   datepickerOpts = {     /* startDate: new Date(2016, 5, 10), */
+    autoclose: true, todayBtn: 'linked',
+    todayHighlight: true, assumeNearbyYear: true,
+    format: 'd MM yyyy', icon: 'fa fa-calendar',
+    datesDisabled : this.booke, clearBtn : true,
+    startDate : new Date() , showOnFocus: true,
+    endDate : new Date(2018,2)
+       };
 
   //If we remove type casting <any> it will throw error
-  timepickerOpts: any[] = <any>{
-    icon: 'fa fa-clock-o',
-    showMeridian: false,
-    minuteStep: 1,
-    defaultTime : 'current'
-  }
-  /* @Input('docProfileEvent') profileList = <any>[] ; */
+  timepickerOpts: any[] = <any>{ 
+                         icon: 'fa fa-clock-o',
+                         showMeridian: false,
+                         minuteStep: 1,
+                         defaultTime : 'current'
+                          };
+    /* @Input('docProfileEvent') profileList = <any>[] ; */
   /* @Output() docProfileEvent = <any>[];
   name:any; */
   
@@ -68,12 +70,40 @@ export class AppointmentModal  {
               this.patientData = result[3];
             })
            
-          
+            this.getDoctorDates();
+            
 
      }
         
+     getDoctorDates():any{
+
+      
+      var entries = {
+        doctorMemberId : this.doctorMemberId
+      }
+
+      this.appoint.blockedDates(entries)
+        .subscribe(
+            
+            (result :any) => {
+                console.log(result.listOfBlockedDates);
+                for(let data of result.listOfBlockedDates){
+                  
+                           //booke.push(new Date(data).toLocaleDateString());
+                           this.blocks.push(new Date(data));
+                    }
+
+                    console.log(this.blocks);
+                    
+            });
+
+             
+
+          }
      
-     
+
+
+
      bookAppoint(){
       
       if(this.date && this.consultingReason){
@@ -89,35 +119,48 @@ export class AppointmentModal  {
             doctorMemberId: this.doctorMemberId
           }
 
-          if(this.date.getTime() >= Date.now()){
-          console.log(entries);
-          this.appoint.bookAppointmentForDoctor(entries)
-          .subscribe(
-            (result: any) => {
-              window.alert(result);
-               (result)? this.route.navigate(['home/'+this.patientData.memberId]) : null;
-                         
-            },
-            (err: any) => {
-              window.alert(err);
-              if(err){
-                this.consultingReason.clear();
-                this.route.navigate(['home/'+this.patientData.memberId]);
-              }
-              
-            }
-          );
-        }
-        else{
-          window.alert ("You cannot book the Appointment for the past day");
-        }
-      }
+          if(this.date.getTime() >= (Date.now()+8.64e+7)){
+              console.log(entries);
+              var temp;
+              for(let data of this.blocks) {
+                 var selectedDate = this.date.setHours(0,0,0,0);
+                 var bookedDate = data.setHours(0,0,0,0);
+                  
+                if( selectedDate.valueOf() === data.valueOf()){
+                  temp = true;
+                  break;
+                }else{ temp = false;}
+                     
 
-      else{
+              } 
+           
+              if(!temp){
+                              this.appoint.bookAppointmentForDoctor(entries)
+                                              .subscribe(
+                                                   (result: any) => {
+                                                      window.alert(result);
+                                                      (result)? this.route.navigate(['home/'+this.patientData.memberId]) : null;                         
+                                                   },
+                                                    (err: any) => {
+                                                    window.alert(err);
+                                                    if(err){
+                                                    this.consultingReason.clear();
+                                                    this.route.navigate(['home/'+this.patientData.memberId]);
+                                                     } 
+                                                });
+                            }else{
+                              window.alert ("We are sorry appointment has already booked!!"+ 
+                                            "Please try again for another date and time! Thank you for your patience!");
+                            }
+      }else{
+          window.alert ("Appointment Not booked!! For Booking an apppintment you need to have atleast 24 "+
+                        "hours of time ,inconvenience regarded!! ");
+        }
+  }else{
         window.alert("You have missed some fields please check and enter properly")
       }
      
-    }
+}
      
     
 

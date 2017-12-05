@@ -113,6 +113,12 @@ var AppointmentService = (function () {
             return response.json();
         });
     };
+    AppointmentService.prototype.blockedDates = function (data) {
+        return this.http.post("http://localhost:8080/ASP/HealthDB/customer/blocked-dates", data)
+            .map(function (response) {
+            return response.json();
+        });
+    };
     return AppointmentService;
 }());
 AppointmentService = __decorate([

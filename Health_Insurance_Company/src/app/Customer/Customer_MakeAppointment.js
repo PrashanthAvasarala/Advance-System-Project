@@ -17,7 +17,9 @@ var AppointmentModal = (function () {
         var _this = this;
         this.route = route;
         this.appoint = appoint;
-        this.booke = ['25 11 2017', '02 12 2017'];
+        //booke : string[] = ['25 11 2017' , '02 12 2017'];
+        this.booke = [];
+        this.blocks = [];
         this.datepickerOpts = {
             autoclose: true, todayBtn: 'linked',
             todayHighlight: true, assumeNearbyYear: true,
@@ -47,7 +49,24 @@ var AppointmentModal = (function () {
             _this.patientCarrier = result[2];
             _this.patientData = result[3];
         });
+        this.getDoctorDates();
     }
+    AppointmentModal.prototype.getDoctorDates = function () {
+        var _this = this;
+        var entries = {
+            doctorMemberId: this.doctorMemberId
+        };
+        this.appoint.blockedDates(entries)
+            .subscribe(function (result) {
+            console.log(result.listOfBlockedDates);
+            for (var _i = 0, _a = result.listOfBlockedDates; _i < _a.length; _i++) {
+                var data = _a[_i];
+                //booke.push(new Date(data).toLocaleDateString());
+                _this.blocks.push(new Date(data));
+            }
+            console.log(_this.blocks);
+        });
+    };
     AppointmentModal.prototype.bookAppoint = function () {
         var _this = this;
         if (this.date && this.consultingReason) {
@@ -62,22 +81,42 @@ var AppointmentModal = (function () {
                 reason: this.consultingReason,
                 doctorMemberId: this.doctorMemberId
             };
-            if (this.date.getTime() >= Date.now()) {
+            if (this.date.getTime() >= (Date.now() + 8.64e+7)) {
                 console.log(entries);
-                this.appoint.bookAppointmentForDoctor(entries)
-                    .subscribe(function (result) {
-                    window.alert(result);
-                    (result) ? _this.route.navigate(['home/' + _this.patientData.memberId]) : null;
-                }, function (err) {
-                    window.alert(err);
-                    if (err) {
-                        _this.consultingReason.clear();
-                        _this.route.navigate(['home/' + _this.patientData.memberId]);
+                var temp;
+                for (var _i = 0, _a = this.blocks; _i < _a.length; _i++) {
+                    var data = _a[_i];
+                    var selectedDate = this.date.setHours(0, 0, 0, 0);
+                    var bookedDate = data.setHours(0, 0, 0, 0);
+                    if (selectedDate.valueOf() === data.valueOf()) {
+                        temp = true;
+                        break;
                     }
-                });
+                    else {
+                        temp = false;
+                    }
+                }
+                if (!temp) {
+                    this.appoint.bookAppointmentForDoctor(entries)
+                        .subscribe(function (result) {
+                        window.alert(result);
+                        (result) ? _this.route.navigate(['home/' + _this.patientData.memberId]) : null;
+                    }, function (err) {
+                        window.alert(err);
+                        if (err) {
+                            _this.consultingReason.clear();
+                            _this.route.navigate(['home/' + _this.patientData.memberId]);
+                        }
+                    });
+                }
+                else {
+                    window.alert("We are sorry appointment has already booked!!" +
+                        "Please try again for another date and time! Thank you for your patience!");
+                }
             }
             else {
-                window.alert("You cannot book the Appointment for the past day");
+                window.alert("Appointment Not booked!! For Booking an apppintment you need to have atleast 24 " +
+                    "hours of time ,inconvenience regarded!! ");
             }
         }
         else {

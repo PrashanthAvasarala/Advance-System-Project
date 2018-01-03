@@ -39,15 +39,14 @@ export class DoctorHeader extends CustomerAuthGuard {
       doctorMemberId: this.customerData.memberId
     };
 
-    this.doctorHomeService.getPastAppointments(entries)
+    this.modalTitle = "Past Appointments";
+
+    this.doctorHomeService.getPastAppointments(entries)    
       .subscribe(appointments => {
         this.patientAppointments = appointments;
       },
       error => {
         this.errorMessage = <any>error;
-      },
-      () => {
-        this.modalTitle = "Past Appointments";
       });
   };
 
@@ -55,16 +54,13 @@ export class DoctorHeader extends CustomerAuthGuard {
     var entries: any = {
       doctorMemberId: this.customerData.memberId
     };
-
+    this.modalTitle = "Patient Reviews";
     this.doctorHomeService.getPatientReviews(entries)
       .subscribe(reviews => {
         this.patientReviews = reviews;
       },
-      error => {
+      error => {        
         this.errorMessage = <any>error;
-      },
-      () => {
-        this.modalTitle = "Past Appointments";
       });
   };
 
@@ -72,16 +68,14 @@ export class DoctorHeader extends CustomerAuthGuard {
     var entries: any = {
       doctorMemberId: this.customerData.memberId
     };
-
+    this.modalTitle = "Lab Reports For PickUp";
     this.doctorHomeService.getPatientLabReports(entries)
       .subscribe(labReports => {
         this.patientLabReports = labReports;
       },
       error => {
+        
         this.errorMessage = <any>error;
-      },
-      () => {
-        this.modalTitle = "Past Appointments";
       });
   }
 
@@ -89,16 +83,13 @@ export class DoctorHeader extends CustomerAuthGuard {
     var entries: any = {
       doctorMemberId: this.customerData.memberId
     };
-
+    this.modalTitle = "More Appointments"
     this.doctorHomeService.getAppointmentsForToday(entries)
       .subscribe(appointments => {
         this.patientAppointments = appointments;
       },
-      error => {
+      error => {        
         this.errorMessage = <any>error;
-      },
-      () => {
-        this.modalTitle = "All Appointments For Today";
       });
   }
 
@@ -106,25 +97,44 @@ export class DoctorHeader extends CustomerAuthGuard {
     var entries: any = {
       doctorMemberId: this.customerData.memberId
     };
-
+    this.profileModalTitle = "Edit Profile"
     this.doctorHomeService.getDoctorProfile(entries)
       .subscribe(doctorProfile => {
-        console.log("Profile clicked" , doctorProfile)
         this.doctorProfile = doctorProfile;
       },
       error => {
-        this.errorMessage = <any>error;
-      },
-      () => this.profileModalTitle = "Edit Profile");
+        console.log("Get Doc Profile", this.doctorProfile);        
+        this.editDocProfileMessage = <any>error;
+        this.hasMessage = true;
+      });
   }
 
   editDoctorProfile(event: any) {
-    console.log("Its here", this.doctorProfile)
-    
 
-    this.doctorHomeService.updateDoctorProfile(this.doctorProfile)
-      .subscribe(response => {
-        this.updateResponse = response;
+    if (!this.doctorProfile.doctorMemberId) {
+      this.doctorProfile.doctorMemberId = this.id;
+      this.doctorProfile.profileExists = false;
+    } else {
+      this.doctorProfile.profileExists = true;
+    }
+    var entries = {
+      affiliatedInsurance: this.doctorProfile.affiliatedInsurance,
+      boardCertification: this.doctorProfile.boardCertification,
+      doctorFirstName: this.doctorProfile.doctorFirstName,
+      doctorLastName: this.doctorProfile.doctorLastName,
+      doctorMemberId: this.doctorProfile.doctorMemberId,
+      education: this.doctorProfile.education,
+      hospitalAffliation: this.doctorProfile.hospitalAffliation,
+      languagesSpoken: this.doctorProfile.languagesSpoken,
+      professionalMemberships: this.doctorProfile.professionalMemberships,
+      profileExists: this.doctorProfile.profileExists,
+      specialities: this.doctorProfile.specialities
+    };
+
+    
+    this.doctorHomeService.updateDoctorProfile(entries)
+      .subscribe(doctorQualifications => {
+        this.updateResponse = doctorQualifications;
         this.hasMessage = true;
         this.editDocProfileMessage = this.updateResponse.successMessage;
       },
@@ -151,6 +161,7 @@ export class DoctorHeader extends CustomerAuthGuard {
 
   logOut() {
     sessionStorage.removeItem("customerData");
+    //sessionStorage.removeItem("userData");
     window.sessionStorage.clear();
     location.reload(true);
     this.rout.navigate(['/login']);

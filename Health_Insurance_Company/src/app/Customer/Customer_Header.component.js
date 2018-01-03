@@ -36,7 +36,7 @@ var CustomerHeader = (function (_super) {
     };
     /* Log out from the session and clearing the storage */
     CustomerHeader.prototype.logOut = function () {
-        sessionStorage.removeItem("userData");
+        sessionStorage.removeItem("customerData");
         window.sessionStorage.clear();
         location.reload(true);
         this.rout.navigate(['/login']);

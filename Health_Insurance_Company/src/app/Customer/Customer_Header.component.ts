@@ -41,7 +41,7 @@ export class CustomerHeader extends CustomerAuthGuard {
   /* Log out from the session and clearing the storage */
 
   logOut() {
-    sessionStorage.removeItem("userData");
+    sessionStorage.removeItem("customerData");
     window.sessionStorage.clear();
     location.reload(true);
     this.rout.navigate(['/login']);

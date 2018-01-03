@@ -7,6 +7,7 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { IPatientAppointments } from '../Doctor/Patient-Appointments';
 import { IDoctorProfile } from '../Doctor/Doctor-Profile';
+import { IDoctorQualifications } from '../Doctor/Doctor-Qualifications';
 
 "use strict";
 
@@ -76,12 +77,13 @@ export class DoctorHomeService {
         console.log("response is ", response.json());
         return response.json();
       })
-      .catch(this.handleError);
+      .catch(this.doctorProfileError);
   }
 
-  updateDoctorProfile(doctorProfile: any): Observable<IDoctorProfile> {
-    return this.http.put(this._updateDocProfileUrl, doctorProfile)
-    .map(
+  updateDoctorProfile(data :any ): Observable<IDoctorQualifications> {
+    
+    return this.http.put(this._updateDocProfileUrl, data)
+      .map(
       (response: Response) => {
         console.log("updated response is ", response.json());
         return response.json();
@@ -92,6 +94,11 @@ export class DoctorHomeService {
   private handleError(err: any) {
     console.log('this is error', err);
     return Observable.throw(JSON.parse(err._body).appointmentsList[0].errMessage);
+  }
+
+  private doctorProfileError(err: any) {
+    console.log('this is error', err);
+    return Observable.throw(JSON.parse(err._body).errMessage);
   }
 
   private labReportsError(err: any) {

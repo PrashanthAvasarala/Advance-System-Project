@@ -14,7 +14,16 @@ public class DoctorQualifications {
 	private String specialities;
 	private String errMessage;
 	private String successMessage;
+	private boolean profileExists;
 	
+	public boolean isProfileExists() {
+		return profileExists;
+	}
+
+	public void setProfileExists(boolean profileExists) {
+		this.profileExists = profileExists;
+	}
+
 	public String getSuccessMessage() {
 		return successMessage;
 	}

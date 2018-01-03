@@ -38,13 +38,12 @@ var DoctorHeader = (function (_super) {
         var entries = {
             doctorMemberId: this.customerData.memberId
         };
+        this.modalTitle = "Past Appointments";
         this.doctorHomeService.getPastAppointments(entries)
             .subscribe(function (appointments) {
             _this.patientAppointments = appointments;
         }, function (error) {
             _this.errorMessage = error;
-        }, function () {
-            _this.modalTitle = "Past Appointments";
         });
     };
     ;
@@ -53,13 +52,12 @@ var DoctorHeader = (function (_super) {
         var entries = {
             doctorMemberId: this.customerData.memberId
         };
+        this.modalTitle = "Patient Reviews";
         this.doctorHomeService.getPatientReviews(entries)
             .subscribe(function (reviews) {
             _this.patientReviews = reviews;
         }, function (error) {
             _this.errorMessage = error;
-        }, function () {
-            _this.modalTitle = "Past Appointments";
         });
     };
     ;
@@ -68,13 +66,12 @@ var DoctorHeader = (function (_super) {
         var entries = {
             doctorMemberId: this.customerData.memberId
         };
+        this.modalTitle = "Lab Reports For PickUp";
         this.doctorHomeService.getPatientLabReports(entries)
             .subscribe(function (labReports) {
             _this.patientLabReports = labReports;
         }, function (error) {
             _this.errorMessage = error;
-        }, function () {
-            _this.modalTitle = "Past Appointments";
         });
     };
     DoctorHeader.prototype.ShowAppointmentsForTodayClicked = function (event) {
@@ -82,13 +79,12 @@ var DoctorHeader = (function (_super) {
         var entries = {
             doctorMemberId: this.customerData.memberId
         };
+        this.modalTitle = "More Appointments";
         this.doctorHomeService.getAppointmentsForToday(entries)
             .subscribe(function (appointments) {
             _this.patientAppointments = appointments;
         }, function (error) {
             _this.errorMessage = error;
-        }, function () {
-            _this.modalTitle = "All Appointments For Today";
         });
     };
     DoctorHeader.prototype.DoctorProfileClicked = function (event) {
@@ -96,20 +92,41 @@ var DoctorHeader = (function (_super) {
         var entries = {
             doctorMemberId: this.customerData.memberId
         };
+        this.profileModalTitle = "Edit Profile";
         this.doctorHomeService.getDoctorProfile(entries)
             .subscribe(function (doctorProfile) {
-            console.log("Profile clicked", doctorProfile);
             _this.doctorProfile = doctorProfile;
         }, function (error) {
-            _this.errorMessage = error;
-        }, function () { return _this.profileModalTitle = "Edit Profile"; });
+            console.log("Get Doc Profile", _this.doctorProfile);
+            _this.editDocProfileMessage = error;
+            _this.hasMessage = true;
+        });
     };
     DoctorHeader.prototype.editDoctorProfile = function (event) {
         var _this = this;
-        console.log("Its here", this.doctorProfile);
-        this.doctorHomeService.updateDoctorProfile(this.doctorProfile)
-            .subscribe(function (response) {
-            _this.updateResponse = response;
+        if (!this.doctorProfile.doctorMemberId) {
+            this.doctorProfile.doctorMemberId = this.id;
+            this.doctorProfile.profileExists = false;
+        }
+        else {
+            this.doctorProfile.profileExists = true;
+        }
+        var entries = {
+            affiliatedInsurance: this.doctorProfile.affiliatedInsurance,
+            boardCertification: this.doctorProfile.boardCertification,
+            doctorFirstName: this.doctorProfile.doctorFirstName,
+            doctorLastName: this.doctorProfile.doctorLastName,
+            doctorMemberId: this.doctorProfile.doctorMemberId,
+            education: this.doctorProfile.education,
+            hospitalAffliation: this.doctorProfile.hospitalAffliation,
+            languagesSpoken: this.doctorProfile.languagesSpoken,
+            professionalMemberships: this.doctorProfile.professionalMemberships,
+            profileExists: this.doctorProfile.profileExists,
+            specialities: this.doctorProfile.specialities
+        };
+        this.doctorHomeService.updateDoctorProfile(entries)
+            .subscribe(function (doctorQualifications) {
+            _this.updateResponse = doctorQualifications;
             _this.hasMessage = true;
             _this.editDocProfileMessage = _this.updateResponse.successMessage;
         }, function (error) {
@@ -130,6 +147,7 @@ var DoctorHeader = (function (_super) {
     };
     DoctorHeader.prototype.logOut = function () {
         sessionStorage.removeItem("customerData");
+        //sessionStorage.removeItem("userData");
         window.sessionStorage.clear();
         location.reload(true);
         this.rout.navigate(['/login']);

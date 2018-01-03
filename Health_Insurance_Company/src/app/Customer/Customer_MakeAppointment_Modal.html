@@ -12,15 +12,28 @@
 
 
       <label>Choose Date and Time :
-         <datetime   [(ngModel)]="date"  [timepicker]="timepickerOpts"
-                     [datepicker]= "datepickerOpts" [hasClearButton]="true"></datetime>
+         <!-- <datetime   [(ngModel)]="date"  [timepicker]="timepickerOpts"
+                     [datepicker]= "datepickerOpts" [hasClearButton]="true"></datetime>  for both date and time -->
+              
+              <datetime   [(ngModel)]="date" [timepicker]="false" [datepicker]= "datepickerOpts" [hasClearButton]="true"></datetime>
          
          
        </label>
 
       <h5><strong><i>Selected Time slot: </i></strong> {{getDate(date) | date: "medium"}}</h5>
 
-      <label style="margin-top : -50px;"> Medical reason : </label>
+      <button (click) = "getAvailDates(date)"> Check Availability</button>
+     
+      <div [hidden] = "!(availableTimes && availableTimes.length)">
+          
+                <span *ngFor = "let time of availableTimes">
+                    <button class="btn btn-primary btn-lg"  style = "margin-right : 10px;"> {{time | date : 'mediumTime'}} </button>
+                </span>     
+                 
+      </div>
+      <br><br>
+
+      <label> Medical reason : </label>
       <br>
       <textarea rows="7" cols="70" [(ngModel)]="consultingReason">Enter consulting reason here...</textarea>
 

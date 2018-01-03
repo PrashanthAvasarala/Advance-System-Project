@@ -59,13 +59,13 @@
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <li>
-                    <a href="#" data-toggle="modal" data-target="#doctorProfile" (click)="DoctorProfileClicked($event)"> Profile </a>
-                  </li>
+              <li>
+                <a href="#" data-toggle="modal" data-target="#doctorProfile" (click)="DoctorProfileClicked($event)"> Profile </a>
+              </li>
               <li>
                 <a [ngStyle]="pointer()" (click)="logOut()"> Log Out </a>
               </li>
-              
+
             </ul>
           </div>
         </div>
@@ -157,28 +157,32 @@
       </div>
 
       <div class="modal-body" style=" overflow-x: hidden; overflow-y: auto; max-height:35em;">
+        <ng-container *ngIf="patientReviews && patientReviews.length; else emptyReviews">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="col-md-2"> Patient Name </th>
+                <th class="col-md-2"> Date </th>
+                <th class="col-md-6"> Review </th>
+                <th class="col-md-2"> Rating </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let review of patientReviews">
+                <td class="col-md-2"> {{review.patientName}} </td>
+                <td class="col-md-2"> {{review.reviewDate | date:'medium'}} </td>
+                <td class="col-md-6"> {{review.review}} </td>
+                <td class="col-md-2">
+                  <rating [(ngModel)]="review.rating" [max]="5" [readonly]="true" [float]="true"></rating>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
 
-        <table class="table" *ngIf="patientReviews && patientReviews.length">
-          <thead>
-            <tr>
-              <th class="col-md-2"> Patient Name </th>
-              <th class="col-md-2"> Date </th>
-              <th class="col-md-6"> Review </th>
-              <th class="col-md-2"> Rating </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let review of patientReviews">
-              <td class="col-md-2"> {{review.patientName}} </td>
-              <td class="col-md-2"> {{review.reviewDate | date:'medium'}} </td>
-              <td class="col-md-6"> {{review.review}} </td>
-              <td class="col-md-2">
-                <rating [(ngModel)]="review.rating" [max]="5" [readonly]="true" [float]="true"></rating>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
+        <ng-template #emptyReviews>
+          <h4 class="card-title">No Reviews To display</h4>
+        </ng-template>
       </div>
 
       <div class="modal-footer">
@@ -192,7 +196,7 @@
 
 <!-- Modal view for Patient Lab Reports -->
 <div id="patientLabReports" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg" >
+  <div class="modal-dialog modal-lg">
 
     <!-- Modal content-->
     <div class="modal-content">
@@ -204,26 +208,30 @@
 
       <div class="modal-body" style="overflow-x: hidden; overflow-y: auto; max-height:35em;">
 
-        <table class="table" *ngIf="patientLabReports && patientLabReports.length">
-          <thead>
-            <tr>
-              <th class="col-md-2"> Patient ID </th>
-              <th class="col-md-3"> Patient Name </th>
-              <th class="col-md-3"> PickUp Date </th>
-              <th class="col-md-4"> Report Type </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let labReport of patientLabReports">
-              <td class="col-md-2"> {{labReport.memberId}} </td>
-              <td class="col-md-3"> {{labReport.patientName}} </td>
-              <td class="col-md-3"> {{labReport.pickupDate | date:'medium'}} </td>
-              <td class="col-md-4"> {{labReport.reportType}} </td>
-            </tr>
+        <ng-container *ngIf="patientLabReports && patientLabReports.length; else emptyReports">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="col-md-2"> Patient ID </th>
+                <th class="col-md-3"> Patient Name </th>
+                <th class="col-md-3"> PickUp Date </th>
+                <th class="col-md-4"> Report Type </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let labReport of patientLabReports">
+                <td class="col-md-2"> {{labReport.memberId}} </td>
+                <td class="col-md-3"> {{labReport.patientName}} </td>
+                <td class="col-md-3"> {{labReport.pickupDate | date:'medium'}} </td>
+                <td class="col-md-4"> {{labReport.reportType}} </td>
+              </tr>
 
-          </tbody>
-        </table>
-        <!-- </div> -->
+            </tbody>
+          </table>
+        </ng-container>
+        <ng-template #emptyReports>
+          <h4 class="card-title">No Patient Lab Reports To PickUp</h4>
+        </ng-template>
 
       </div>
 
@@ -251,14 +259,26 @@
 
       <div class="container-fluid">
         <div class="row-fluid" [hidden]="!hasMessage">
-          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 alert alert-danger">
-            <button type="button" class="close" (click)="clearError()">
-              &times;
-            </button>
-            <span>
-              {{editDocProfileMessage}}
-            </span>
-          </div>
+          <ng-container *ngIf="this.updateResponse.successMessage; else errorMessage">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 alert alert-success">
+              <button type="button" class="close" (click)="clearError()" data-dismiss="modal">
+                &times;
+              </button>
+              <span>
+                {{editDocProfileMessage}}
+              </span>
+            </div>
+          </ng-container>
+          <ng-template #errorMessage>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 alert alert-danger">
+              <button type="button" class="close" (click)="clearError()">
+                &times;
+              </button>
+              <span>
+                {{editDocProfileMessage}}
+              </span>
+            </div>
+          </ng-template>
         </div>
       </div>
 
@@ -268,56 +288,56 @@
           <form (ngSubmit)="editDoctorProfile()" #docProfile="ngForm">
             <div class="form-group">
               <label for="firstname">First Name</label>
-              <input type="text" class="form-control" id="firstname" [(ngModel)]="doctorProfile.doctorFirstName"
-                    name="firstname"  pattern="^[a-zA-Z]+(\s[a-zA-Z]+)*$" required>
+              <input type="text" class="form-control" id="firstname" [(ngModel)]="doctorProfile.doctorFirstName" name="firstname" pattern="^[a-zA-Z]+(\s[a-zA-Z]+)*$"
+                required>
             </div>
 
             <div class="form-group">
               <label for="lastname">Last Name</label>
-              <input type="text" class="form-control" id="lastname" [(ngModel)]="doctorProfile.doctorLastName"
-                     name="lastname" pattern="^[a-zA-Z]+(\s[a-zA-Z]+)*$" required>
+              <input type="text" class="form-control" id="lastname" [(ngModel)]="doctorProfile.doctorLastName" name="lastname" pattern="^[a-zA-Z]+(\s[a-zA-Z]+)*$"
+                required>
             </div>
 
             <div class="form-group">
               <label for="education">Education</label>
-              <input type="text" class="form-control" id="education"  [(ngModel)]="doctorProfile.education"
-                     name="education" pattern="^[a-zA-Z.]+(,\s[a-zA-Z.]+)*$" required>
+              <input type="text" class="form-control" id="education" [(ngModel)]="doctorProfile.education" name="education" pattern="^[a-zA-Z.]+(,\s[a-zA-Z.]+)*$"
+                required>
             </div>
 
             <div class="form-group">
               <label for="affiliatedHospital">Hospital Affiliations</label>
-              <input type="text" class="form-control" id="affiliatedHospitals"  [(ngModel)]="doctorProfile.hospitalAffliation"
-                     name="affiliatedHospital" pattern="^[a-zA-Z]+(\s[a-zA-Z]+)*$" required>
+              <input type="text" class="form-control" id="affiliatedHospitals" [(ngModel)]="doctorProfile.hospitalAffliation" name="affiliatedHospital"
+                pattern="^[a-zA-Z]+(\s[a-zA-Z]+)*$" required>
             </div>
 
             <div class="form-group">
               <label for="languages">Languages Spoken</label>
-              <input type="text" class="form-control" id="languages"  [(ngModel)]="doctorProfile.languagesSpoken"
-                     name="languages" pattern="^[a-zA-Z,].*$" required>
+              <input type="text" class="form-control" id="languages" [(ngModel)]="doctorProfile.languagesSpoken" name="languages" pattern="^[a-zA-Z,].*$"
+                required>
             </div>
 
             <div class="form-group">
               <label for="certifications">Board Certifications</label>
-              <input type="text" class="form-control" id="certifications"  [(ngModel)]="doctorProfile.boardCertification"
-                     name="certifications" pattern="([a-zA-Z]+(\s[a-zA-Z])).*" required>
+              <input type="text" class="form-control" id="certifications" [(ngModel)]="doctorProfile.boardCertification" name="certifications"
+                pattern="([a-zA-Z]+(\s[a-zA-Z])).*" required>
             </div>
 
             <div class="form-group">
               <label for="memberships">Professional Memberships</label>
-              <input type="text" class="form-control" id="memberships" [(ngModel)]="doctorProfile.professionalMemberships"
-                     name="memberships" pattern="([a-zA-Z]+(\s[a-zA-Z])).*" required>
+              <input type="text" class="form-control" id="memberships" [(ngModel)]="doctorProfile.professionalMemberships" name="memberships"
+                pattern="([a-zA-Z]+(\s[a-zA-Z])).*" required>
             </div>
 
             <div class="form-group">
               <label for="affiliatedInsurance">In-Network Insurances</label>
-              <input type="text" class="form-control" id="affiliatedInsurance"  [(ngModel)]="doctorProfile.affiliatedInsurance"
-                name="affiliatedInsurance" pattern="([a-zA-Z]+(\s[a-zA-Z])).*" required>
+              <input type="text" class="form-control" id="affiliatedInsurance" [(ngModel)]="doctorProfile.affiliatedInsurance" name="affiliatedInsurance"
+                pattern="([a-zA-Z]+(\s[a-zA-Z])).*" required>
             </div>
 
             <div class="form-group">
               <label for="specialties">Specialties</label>
-              <input type="text" class="form-control" id="specialties"  [(ngModel)]="doctorProfile.specialities"
-                     name="specialities" pattern="([a-zA-Z]+(\s[a-zA-Z])).*" required>
+              <input type="text" class="form-control" id="specialties" [(ngModel)]="doctorProfile.specialities" name="specialities" pattern="([a-zA-Z]+(\s[a-zA-Z])).*"
+                required>
             </div>
 
             <button type="submit" class="btn btn-success" [disabled]="!docProfile.form.valid || hasError">Submit</button>

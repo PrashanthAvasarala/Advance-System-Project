@@ -37,6 +37,8 @@ var AppointmentModal = (function () {
         };
         this.patientData = {};
         this.consultingReason = '';
+        this.map = {};
+        this.availableTimes = [];
         this.appoint.getDoctorAndPaitentMemberId()
             .subscribe(function (result) {
             /* console.log(result);
@@ -51,6 +53,38 @@ var AppointmentModal = (function () {
         });
         this.getDoctorDates();
     }
+    /* ngAfterContentInit(){
+  
+     this.map = new Map();
+     this.myDate= new Date(2018,1,7);
+     
+     this.map.set(this.myDate,[new Date(2018,1,7,9,0).getTime() , new Date(2018,1,7,12,0).getTime() , new Date(2018,1,7,15,0).getTime()]);
+     this.map.set(new Date(2018,1,8),[new Date(2018,1,7,8,0).getTime() , new Date(2018,1,8,12,0).getTime() , new Date(2018,1,8,15,0).getTime()]);
+     this.map.set(new Date(2018,1,9),[new Date(2018,1,9,9,0).getTime() , new Date(2018,1,9,12,0).getTime() , new Date(2018,1,9,15,0).getTime()]);
+     console.log(this.map.get(this.myDate));
+    } */
+    AppointmentModal.prototype.getAvailDates = function (dates) {
+        var _this = this;
+        //console.log("date entered is ", dates);
+        this.map = new Map();
+        this.myDate = new Date(2018, 0, 3);
+        this.map.set(this.myDate, [new Date(2018, 0, 3, 9, 0).getTime(), new Date(2018, 0, 3, 12, 0).getTime(), new Date(2018, 0, 3, 15, 0).getTime()]);
+        this.map.set(new Date(2018, 1, 8), [new Date(2018, 1, 8, 8, 0).getTime(), new Date(2018, 1, 8, 12, 0).getTime(), new Date(2018, 1, 8, 15, 0).getTime()]);
+        this.map.set(new Date(2018, 1, 9), [new Date(2018, 1, 9, 10, 0).getTime(), new Date(2018, 1, 9, 12, 0).getTime(), new Date(2018, 1, 9, 13, 0).getTime()]);
+        // console.log("my date", this.myDate);
+        // console.log("my date", this.myDate);
+        // console.log("check in the map", this.map.get(this.myDate));
+        // console.log("check in the map", this.map.get(this.myDate));
+        // console.log("keys length", this.map.keys());
+        this.map.forEach(function (value, key) {
+            if (key.getDay() == dates.getDay()) {
+                _this.availableTimes = value;
+                console.log(_this.availableTimes.length);
+                return _this.availableTimes;
+            }
+        });
+        return this.availableTimes;
+    };
     AppointmentModal.prototype.getDoctorDates = function () {
         var _this = this;
         var entries = {

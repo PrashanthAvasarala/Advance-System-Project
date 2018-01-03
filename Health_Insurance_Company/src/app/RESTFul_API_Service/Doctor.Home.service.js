@@ -64,10 +64,10 @@ var DoctorHomeService = (function () {
             console.log("response is ", response.json());
             return response.json();
         })
-            .catch(this.handleError);
+            .catch(this.doctorProfileError);
     };
-    DoctorHomeService.prototype.updateDoctorProfile = function (doctorProfile) {
-        return this.http.put(this._updateDocProfileUrl, doctorProfile)
+    DoctorHomeService.prototype.updateDoctorProfile = function (data) {
+        return this.http.put(this._updateDocProfileUrl, data)
             .map(function (response) {
             console.log("updated response is ", response.json());
             return response.json();
@@ -77,6 +77,10 @@ var DoctorHomeService = (function () {
     DoctorHomeService.prototype.handleError = function (err) {
         console.log('this is error', err);
         return Observable_1.Observable.throw(JSON.parse(err._body).appointmentsList[0].errMessage);
+    };
+    DoctorHomeService.prototype.doctorProfileError = function (err) {
+        console.log('this is error', err);
+        return Observable_1.Observable.throw(JSON.parse(err._body).errMessage);
     };
     DoctorHomeService.prototype.labReportsError = function (err) {
         console.log('this is labreports error', JSON.parse(err._body).patientLabReports[0].errMessage);

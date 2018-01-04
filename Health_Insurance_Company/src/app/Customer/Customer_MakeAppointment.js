@@ -37,8 +37,10 @@ var AppointmentModal = (function () {
         };
         this.patientData = {};
         this.consultingReason = '';
+        this.valuesEntered = false;
         this.map = {};
         this.availableTimes = [];
+        this.errorMessage = '';
         this.appoint.getDoctorAndPaitentMemberId()
             .subscribe(function (result) {
             /* console.log(result);
@@ -63,11 +65,16 @@ var AppointmentModal = (function () {
      this.map.set(new Date(2018,1,9),[new Date(2018,1,9,9,0).getTime() , new Date(2018,1,9,12,0).getTime() , new Date(2018,1,9,15,0).getTime()]);
      console.log(this.map.get(this.myDate));
     } */
-    AppointmentModal.prototype.getAvailDates = function (dates) {
+    AppointmentModal.prototype.getAvailableDates = function (dates) {
         var _this = this;
         this.availableTimes = [];
-        /* console.log("date entered is ", dates); */
-        /*console.log("my date", this.myDate);*/
+        this.errorMessage = '';
+        /* console.log("date entered is ", dates);
+           console.log("my date", this.myDate);*/
+        if (!dates) {
+            this.errorMessage = "Please enter the date and then check Doctor's availability";
+            return this.availableTimes;
+        }
         this.map = new Map();
         this.myDate = new Date(2018, 0, 3);
         this.map.set(this.myDate, [new Date(2018, 0, 3, 9, 0), new Date(2018, 0, 3, 12, 0), new Date(2018, 0, 3, 15, 0)]);
@@ -79,13 +86,17 @@ var AppointmentModal = (function () {
         // console.log("keys length", this.map.keys());
         this.map.forEach(function (value, key) {
             /* console.log("date entered is ", dates.getDate() , "Month entered is ", dates.getMonth() );
-            console.log("date from databse is ", key.getDate() , "Month from databse is ", key.getMonth() ); */
-            if (key.getDate() == dates.getDate()) {
+               console.log("date from databse is ", key.getDate() , "Month from databse is ", key.getMonth() ); */
+            _this.errorMessage = '';
+            if (key.getDate() == dates.getDate() && key.getMonth() == dates.getMonth()) {
                 _this.availableTimes = value;
                 console.log(_this.availableTimes);
                 return _this.availableTimes;
             }
         });
+        if (!(this.availableTimes && this.availableTimes.length)) {
+            this.errorMessage = "Doctor not available on this date , please select other date";
+        }
         return this.availableTimes;
     };
     AppointmentModal.prototype.getDoctorDates = function () {
@@ -118,12 +129,12 @@ var AppointmentModal = (function () {
                 reason: this.consultingReason,
                 doctorMemberId: this.doctorMemberId
             };
-            if (this.date.getTime() >= (Date.now() + 8.64e+7)) {
+            if (this.bookedDate.getTime() >= (Date.now() + 8.64e+7)) {
                 console.log(entries);
                 var temp;
                 for (var _i = 0, _a = this.blocks; _i < _a.length; _i++) {
                     var data = _a[_i];
-                    var selectedDate = this.date.setHours(0, 0, 0, 0);
+                    var selectedDate = this.bookedDate.setHours(0, 0, 0, 0);
                     //var bookedDate = data.setHours(0, 0, 0, 0);
                     if (selectedDate.valueOf() === data.setHours(0, 0, 0, 0).valueOf()) {
                         temp = true;

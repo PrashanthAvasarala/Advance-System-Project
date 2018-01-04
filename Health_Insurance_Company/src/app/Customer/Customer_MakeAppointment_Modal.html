@@ -15,10 +15,10 @@
          <!-- <datetime   [(ngModel)]="date"  [timepicker]="timepickerOpts"
                           [datepicker]= "datepickerOpts" [hasClearButton]="true">
               </datetime>  for both date and time -->              
-        <datetime   [(ngModel)]="date" [timepicker]="false" [datepicker]= "datepickerOpts" [hasClearButton]="false"></datetime>        
+        <datetime   [(ngModel)]="bookedDate" [timepicker]="false" [datepicker]= "datepickerOpts" [hasClearButton]="false"></datetime>        
        </label>     
       <br><br>
-      <button (click) = "getAvailDates(date)"> Check Availability</button>
+      <button (click) = "getAvailableDates(bookedDate)"> Check Availability</button>
       <div [hidden] = "!(availableTimes && availableTimes.length)"> 
           <br><br>         
                 <span *ngFor = "let time of availableTimes">
@@ -28,6 +28,7 @@
       </div>
       
       <h5 [hidden] = "!(availableTimes && availableTimes.length)"><strong><i>Selected Time slot: </i></strong> {{bookedDate | date: "medium"}}</h5>
+      <h5><strong><i> {{ errorMessage }}  </i></strong> </h5>
       <br>
       <label> Medical reason : </label>
       <br>

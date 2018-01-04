@@ -50,12 +50,12 @@ export class AppointmentModal {
   patientCarrier: any;
   patientData = <any>{};
   consultingReason: any = '';
-  valuesEntered: boolean;
+  valuesEntered: boolean = false;
   map = <any>{};
   myDate: Date;
   availableTimes: any[] = [];
   bookedDate: Date;
-
+  errorMessage :any = '';
 
 
   constructor(private route: Router, private appoint: AppointmentService) {
@@ -89,11 +89,16 @@ export class AppointmentModal {
    console.log(this.map.get(this.myDate));
   } */
 
-  getAvailDates(dates: Date): any {
+  getAvailableDates(dates: Date): any {
     this.availableTimes = [];
-    /* console.log("date entered is ", dates); */
-    
-    /*console.log("my date", this.myDate);*/
+    this.errorMessage = '';
+    /* console.log("date entered is ", dates);    
+       console.log("my date", this.myDate);*/
+
+       if(!dates){
+           this.errorMessage = "Please enter the date and then check Doctor's availability"; 
+           return this.availableTimes;        
+       }
 
     this.map = new Map();
     this.myDate = new Date(2018, 0, 3);
@@ -106,18 +111,29 @@ export class AppointmentModal {
     // console.log("check in the map", this.map.get(this.myDate));
     // console.log("keys length", this.map.keys());
 
+    
+
     this.map.forEach((value: any, key: Date) => {
       /* console.log("date entered is ", dates.getDate() , "Month entered is ", dates.getMonth() );
-      console.log("date from databse is ", key.getDate() , "Month from databse is ", key.getMonth() ); */
-      if (key.getDate() == dates.getDate()) {
+         console.log("date from databse is ", key.getDate() , "Month from databse is ", key.getMonth() ); */
+        this.errorMessage = '';
+      if (key.getDate() == dates.getDate() && key.getMonth() == dates.getMonth()) {
         this.availableTimes = value;
         console.log(this.availableTimes);
         return this.availableTimes;
       } 
+      
     });
 
+    
+    if(!(this.availableTimes && this.availableTimes.length)){
+      this.errorMessage = "Doctor not available on this date , please select other date"; 
+    }       
     return this.availableTimes;
   }
+
+
+
 
   getDoctorDates(): any {
     var entries = {
@@ -158,11 +174,11 @@ export class AppointmentModal {
         doctorMemberId: this.doctorMemberId
       }
 
-      if (this.date.getTime() >= (Date.now() + 8.64e+7)) {
+      if (this.bookedDate.getTime() >= (Date.now() + 8.64e+7)) {
         console.log(entries);
         var temp;
         for (let data of this.blocks) {
-          var selectedDate = this.date.setHours(0, 0, 0, 0);
+          var selectedDate = this.bookedDate.setHours(0, 0, 0, 0);
           //var bookedDate = data.setHours(0, 0, 0, 0);
 
           if (selectedDate.valueOf() === data.setHours(0, 0, 0, 0).valueOf()) {

@@ -24,7 +24,7 @@ var AppointmentModal = (function () {
             autoclose: true, todayBtn: 'linked',
             todayHighlight: true, assumeNearbyYear: true,
             format: 'd MM yyyy', icon: 'fa fa-calendar',
-            datesDisabled: this.booke, clearBtn: true,
+            datesDisabled: this.booke, clearBtn: false,
             startDate: new Date(), showOnFocus: true,
             endDate: new Date(2018, 2)
         };
@@ -65,21 +65,24 @@ var AppointmentModal = (function () {
     } */
     AppointmentModal.prototype.getAvailDates = function (dates) {
         var _this = this;
-        //console.log("date entered is ", dates);
+        this.availableTimes = [];
+        /* console.log("date entered is ", dates); */
+        /*console.log("my date", this.myDate);*/
         this.map = new Map();
         this.myDate = new Date(2018, 0, 3);
-        this.map.set(this.myDate, [new Date(2018, 0, 3, 9, 0).getTime(), new Date(2018, 0, 3, 12, 0).getTime(), new Date(2018, 0, 3, 15, 0).getTime()]);
-        this.map.set(new Date(2018, 1, 8), [new Date(2018, 1, 8, 8, 0).getTime(), new Date(2018, 1, 8, 12, 0).getTime(), new Date(2018, 1, 8, 15, 0).getTime()]);
-        this.map.set(new Date(2018, 1, 9), [new Date(2018, 1, 9, 10, 0).getTime(), new Date(2018, 1, 9, 12, 0).getTime(), new Date(2018, 1, 9, 13, 0).getTime()]);
-        // console.log("my date", this.myDate);
+        this.map.set(this.myDate, [new Date(2018, 0, 3, 9, 0), new Date(2018, 0, 3, 12, 0), new Date(2018, 0, 3, 15, 0)]);
+        this.map.set(new Date(2018, 1, 8), [new Date(2018, 1, 8, 8, 0), new Date(2018, 1, 8, 12, 0), new Date(2018, 1, 8, 15, 0)]);
+        this.map.set(new Date(2018, 1, 9), [new Date(2018, 1, 9, 10, 0), new Date(2018, 1, 9, 12, 0), new Date(2018, 1, 9, 13, 0)]);
         // console.log("my date", this.myDate);
         // console.log("check in the map", this.map.get(this.myDate));
         // console.log("check in the map", this.map.get(this.myDate));
         // console.log("keys length", this.map.keys());
         this.map.forEach(function (value, key) {
-            if (key.getDay() == dates.getDay()) {
+            /* console.log("date entered is ", dates.getDate() , "Month entered is ", dates.getMonth() );
+            console.log("date from databse is ", key.getDate() , "Month from databse is ", key.getMonth() ); */
+            if (key.getDate() == dates.getDate()) {
                 _this.availableTimes = value;
-                console.log(_this.availableTimes.length);
+                console.log(_this.availableTimes);
                 return _this.availableTimes;
             }
         });
@@ -103,7 +106,7 @@ var AppointmentModal = (function () {
     };
     AppointmentModal.prototype.bookAppoint = function () {
         var _this = this;
-        if (this.date && this.consultingReason) {
+        if (this.bookedDate && this.consultingReason) {
             var entries = {};
             entries = {
                 memberId: this.patientData.memberId,
@@ -111,7 +114,7 @@ var AppointmentModal = (function () {
                 patientLastName: this.patientData.lastName,
                 contactNum: this.patientData.phone,
                 carrierName: this.patientCarrier,
-                appointDate: this.date.toISOString(),
+                appointDate: this.bookedDate.toISOString(),
                 reason: this.consultingReason,
                 doctorMemberId: this.doctorMemberId
             };
@@ -121,8 +124,8 @@ var AppointmentModal = (function () {
                 for (var _i = 0, _a = this.blocks; _i < _a.length; _i++) {
                     var data = _a[_i];
                     var selectedDate = this.date.setHours(0, 0, 0, 0);
-                    var bookedDate = data.setHours(0, 0, 0, 0);
-                    if (selectedDate.valueOf() === data.valueOf()) {
+                    //var bookedDate = data.setHours(0, 0, 0, 0);
+                    if (selectedDate.valueOf() === data.setHours(0, 0, 0, 0).valueOf()) {
                         temp = true;
                         break;
                     }
@@ -158,6 +161,8 @@ var AppointmentModal = (function () {
         }
     };
     AppointmentModal.prototype.getDate = function (dt) {
+        this.bookedDate = dt;
+        console.log(dt && dt.getTime());
         return dt && dt.getTime();
     };
     return AppointmentModal;

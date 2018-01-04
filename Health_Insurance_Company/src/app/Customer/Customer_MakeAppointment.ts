@@ -29,7 +29,7 @@ export class AppointmentModal {
     autoclose: true, todayBtn: 'linked',
     todayHighlight: true, assumeNearbyYear: true,
     format: 'd MM yyyy', icon: 'fa fa-calendar',
-    datesDisabled: this.booke, clearBtn: true,
+    datesDisabled: this.booke, clearBtn: false,
     startDate: new Date(), showOnFocus: true,
     endDate: new Date(2018, 2)
   };
@@ -54,6 +54,7 @@ export class AppointmentModal {
   map = <any>{};
   myDate: Date;
   availableTimes: any[] = [];
+  bookedDate: Date;
 
 
 
@@ -75,10 +76,6 @@ export class AppointmentModal {
 
 
     this.getDoctorDates();
-
-
-
-
   }
 
   /* ngAfterContentInit(){
@@ -93,38 +90,36 @@ export class AppointmentModal {
   } */
 
   getAvailDates(dates: Date): any {
-    //console.log("date entered is ", dates);
+    this.availableTimes = [];
+    /* console.log("date entered is ", dates); */
+    
+    /*console.log("my date", this.myDate);*/
+
     this.map = new Map();
     this.myDate = new Date(2018, 0, 3);
-
-    this.map.set(this.myDate, [new Date(2018, 0, 3, 9, 0).getTime(), new Date(2018, 0, 3, 12, 0).getTime(), new Date(2018, 0, 3, 15, 0).getTime()]);
-    this.map.set(new Date(2018,1,8),[new Date(2018,1,8,8,0).getTime() , new Date(2018,1,8,12,0).getTime() , new Date(2018,1,8,15,0).getTime()]);
-    this.map.set(new Date(2018,1,9),[new Date(2018,1,9,10,0).getTime() , new Date(2018,1,9,12,0).getTime() , new Date(2018,1,9,13,0).getTime()]);
+    this.map.set(this.myDate, [new Date(2018, 0, 3, 9, 0), new Date(2018, 0, 3, 12, 0), new Date(2018, 0, 3, 15, 0)]);
+    this.map.set(new Date(2018, 1, 8), [new Date(2018, 1, 8, 8, 0), new Date(2018, 1, 8, 12, 0), new Date(2018, 1, 8, 15, 0)]);
+    this.map.set(new Date(2018, 1, 9), [new Date(2018, 1, 9, 10, 0), new Date(2018, 1, 9, 12, 0), new Date(2018, 1, 9, 13, 0)]);
 
     // console.log("my date", this.myDate);
-    // console.log("my date", this.myDate);
-
     // console.log("check in the map", this.map.get(this.myDate));
     // console.log("check in the map", this.map.get(this.myDate));
     // console.log("keys length", this.map.keys());
 
     this.map.forEach((value: any, key: Date) => {
-      if (key.getDay() == dates.getDay()) {
+      /* console.log("date entered is ", dates.getDate() , "Month entered is ", dates.getMonth() );
+      console.log("date from databse is ", key.getDate() , "Month from databse is ", key.getMonth() ); */
+      if (key.getDate() == dates.getDate()) {
         this.availableTimes = value;
-        console.log(this.availableTimes.length);
+        console.log(this.availableTimes);
         return this.availableTimes;
-      }
+      } 
     });
 
-  
-
     return this.availableTimes;
-   
   }
 
   getDoctorDates(): any {
-
-
     var entries = {
       doctorMemberId: this.doctorMemberId
     }
@@ -143,9 +138,6 @@ export class AppointmentModal {
         console.log(this.blocks);
 
       });
-
-
-
   }
 
 
@@ -153,7 +145,7 @@ export class AppointmentModal {
 
   bookAppoint() {
 
-    if (this.date && this.consultingReason) {
+    if (this.bookedDate && this.consultingReason) {
       var entries = <any>{}
       entries = {
         memberId: this.patientData.memberId,
@@ -161,7 +153,7 @@ export class AppointmentModal {
         patientLastName: this.patientData.lastName,
         contactNum: this.patientData.phone,
         carrierName: this.patientCarrier,
-        appointDate: this.date.toISOString(), // Converting date to java script string noatation and result will be  "2017-11-27T11:30:18.992Z"
+        appointDate: this.bookedDate.toISOString(), // Converting date to java script string noatation and result will be  "2017-11-27T11:30:18.992Z"
         reason: this.consultingReason,
         doctorMemberId: this.doctorMemberId
       }
@@ -171,9 +163,9 @@ export class AppointmentModal {
         var temp;
         for (let data of this.blocks) {
           var selectedDate = this.date.setHours(0, 0, 0, 0);
-          var bookedDate = data.setHours(0, 0, 0, 0);
+          //var bookedDate = data.setHours(0, 0, 0, 0);
 
-          if (selectedDate.valueOf() === data.valueOf()) {
+          if (selectedDate.valueOf() === data.setHours(0, 0, 0, 0).valueOf()) {
             temp = true;
             break;
           } else { temp = false; }
@@ -216,6 +208,8 @@ export class AppointmentModal {
 
 
   getDate(dt: Date): number {
+    this.bookedDate = dt ;
+    console.log(dt && dt.getTime());
     return dt && dt.getTime();
   }
 

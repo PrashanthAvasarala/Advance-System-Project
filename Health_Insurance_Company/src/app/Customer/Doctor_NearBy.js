@@ -28,6 +28,12 @@ var DoctorNearBy = (function (_super) {
         _this.docList = [];
         return _this;
     }
+    DoctorNearBy.prototype.pointer = function () {
+        var myStyles = {
+            'cursor': 'pointer'
+        };
+        return myStyles;
+    };
     DoctorNearBy.prototype.setSelectedDoctorMemberId = function (id, name, option) {
         /* console.log("Doctor Id" ,id)
         console.log("I'm in DoctorNearBy " ,this.customerData); */
@@ -35,8 +41,10 @@ var DoctorNearBy = (function (_super) {
         this.apponit.setDoctorAndPaitentDetails(id, name, this.carrier, this.customerData);
         if (option === 'Appointment')
             this.rout.navigate(['home/' + this.customerData.memberId + '/appointment/docAppoint'], { queryParams: { doc_id: id } });
-        else
+        else if (option === 'Review')
             this.rout.navigate(['home/' + this.customerData.memberId + '/appointment/docAppoint/' + id + '/addReview']);
+        else
+            this.rout.navigate(['home/' + this.customerData.memberId + '/appointment/doctor-profile/' + id]);
     };
     return DoctorNearBy;
 }(Customer_AuthGuard_1.CustomerAuthGuard));

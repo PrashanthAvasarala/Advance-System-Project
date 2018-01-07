@@ -31,6 +31,13 @@ export class DoctorNearBy extends CustomerAuthGuard {
           }      
 
      
+          pointer(): any {
+            let myStyles = {
+                            'cursor': 'pointer'
+                           }
+            return myStyles;
+                }
+
         setSelectedDoctorMemberId(id:any , name:any , option : string){
             
             /* console.log("Doctor Id" ,id)
@@ -39,8 +46,10 @@ export class DoctorNearBy extends CustomerAuthGuard {
             this.apponit.setDoctorAndPaitentDetails(id,name,this.carrier,this.customerData);
             if( option === 'Appointment')
             this.rout.navigate(['home/'+this.customerData.memberId+'/appointment/docAppoint'],{ queryParams: { doc_id: id} } );
-            else
+            else if( option === 'Review' )
             this.rout.navigate(['home/'+this.customerData.memberId+'/appointment/docAppoint/'+id+'/addReview']);
+            else
+            this.rout.navigate(['home/'+this.customerData.memberId+'/appointment/doctor-profile/'+id]);
 
           }
         

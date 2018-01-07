@@ -20,19 +20,20 @@ var ReviewModal = (function () {
         this.starsCount = [1, 1, 1];
         this.patientData = [];
         this.overAllRating = 0;
-        this.datepickerOpts = {
+        /* datepickerOpts: any = {
             autoclose: true, todayBtn: 'linked',
             todayHighlight: true, assumeNearbyYear: true,
             format: 'd MM yyyy', icon: 'fa fa-calendar',
-            clearBtn: true, startDate: new Date(2017, 1),
-            showOnFocus: true, endDate: new Date()
-        };
-        this.timepickerOpts = {
-            icon: 'fa fa-clock-o',
-            showMeridian: false,
-            minuteStep: 1,
-            defaultTime: 'current'
-        };
+            clearBtn : true, startDate : new Date(2017,1) ,
+            showOnFocus: true, endDate : new Date()
+          };
+    
+        timepickerOpts: any = {
+           icon: 'fa fa-clock-o',
+           showMeridian: false,
+           minuteStep: 1,
+           defaultTime : 'current'
+           } */
         this.patientAppointList = {};
         this.appoint.getDoctorAndPaitentMemberId()
             .subscribe(function (result) {
@@ -51,57 +52,58 @@ var ReviewModal = (function () {
         }
         //console.log("I'm result",this.overAllRating/=3)
         this.overAllRating /= 3;
-        if (this.date && this.reviewText) {
-            if (this.date.getTime() <= Date.now()) {
-                var temp = null;
-                var data = {
-                    memberId: this.patientData.memberId,
-                };
-                this.appoint.listOfAppointments(data)
-                    .subscribe(function (gotBackResult) {
-                    _this.patientAppointList = gotBackResult.appointmentsList;
-                    for (var _i = 0, _a = _this.patientAppointList; _i < _a.length; _i++) {
-                        var singleAppointment = _a[_i];
-                        var selectedDate = _this.date.setHours(0, 0, 0, 0);
-                        var appointmentAttendedDate = new Date(singleAppointment.dateFromDb).setHours(0, 0, 0, 0);
-                        if ((singleAppointment.doctorMemberId === _this.doctorMemberId) && (appointmentAttendedDate.valueOf() === selectedDate.valueOf())) {
-                            temp = true;
-                            break;
-                        }
-                        else {
-                            temp = false;
-                        }
-                    }
-                });
-                if (temp) {
-                    var entries = {
-                        memberId: this.patientData.memberId,
-                        doctorMemberId: this.doctorMemberId,
-                        review: this.reviewText,
-                        date: this.date.toISOString(),
-                        rating: this.overAllRating
-                    };
-                    //console.log(entries)
-                    this.appoint.writeReviewForDoctor(entries)
-                        .subscribe(function (result) {
-                        //console.log("I'm in Add_review class ",result);
-                        window.alert(result.errMessage);
-                        _this.date = null;
-                        _this.reviewText = null;
-                        _this.route.navigate(['home/' + _this.patientData.memberId]);
-                    });
+        var data = { memberId: this.patientData.memberId, };
+        var temp;
+        this.appoint.listOfAppointments(data)
+            .subscribe(function (gotBackResult) {
+            console.log(gotBackResult);
+            _this.patientAppointList = gotBackResult.appointmentsList;
+            for (var _i = 0, _a = _this.patientAppointList; _i < _a.length; _i++) {
+                var singleAppointment = _a[_i];
+                var appointmentAttendedDate = new Date(singleAppointment.dateFromDb);
+                console.log("appointmentAttendedDate from database", appointmentAttendedDate);
+                console.log("Member Id from database", singleAppointment.doctorMemberId);
+                console.log("Local Member Id", _this.doctorMemberId);
+                console.log("ppointmentAttendedDate from database in milli seconds", appointmentAttendedDate.valueOf());
+                console.log("new date in milli seconds", new Date().valueOf());
+                if ((singleAppointment.doctorMemberId === _this.doctorMemberId) && (appointmentAttendedDate.valueOf() < new Date().valueOf())) {
+                    temp = true;
+                    _this.access = temp;
+                    break;
                 }
                 else {
-                    window.alert("The Appointment date you have entered doesn't match with our database" +
-                        " Or you did not consult this doctor , With out consulting the doctor," +
-                        "you cannot give the review ");
-                    this.date = null;
-                    this.reviewText = null;
-                    this.route.navigate(['home/' + this.patientData.memberId]);
+                    temp = false;
+                    _this.access = temp;
                 }
+            }
+        });
+        if (this.reviewText) {
+            console.log("I can give review", temp);
+            console.log("I can give review", this.access);
+            if (this.access) {
+                var entries = {
+                    memberId: this.patientData.memberId,
+                    doctorMemberId: this.doctorMemberId,
+                    review: this.reviewText,
+                    //date : this.date.toISOString(),
+                    date: new Date(),
+                    rating: this.overAllRating
+                };
+                //console.log(entries)
+                this.appoint.writeReviewForDoctor(entries)
+                    .subscribe(function (result) {
+                    //console.log("I'm in Add_review class ",result);
+                    window.alert(result.errMessage);
+                    _this.date = null;
+                    _this.reviewText = null;
+                    _this.route.navigate(['home/' + _this.patientData.memberId]);
+                });
             }
             else {
                 window.alert("You cannot give review before itself without consulting doctor");
+                this.date = null;
+                this.reviewText = null;
+                this.route.navigate(['home/' + this.patientData.memberId]);
             }
         }
         else {

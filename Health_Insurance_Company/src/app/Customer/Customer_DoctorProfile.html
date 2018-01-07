@@ -1,0 +1,87 @@
+<Customer-Header></Customer-Header>
+
+<h1>{{ doctorName }}</h1>
+<br>
+
+<div class="modal-body" style="overflow-x: hidden; overflow-y: auto; height:35em;">
+    <h3 id = "experience"> {{profileModalTitle[0]}} </h3>
+  <ng-container *ngIf=" (doctorProfile) && (doctorProfile.length != 0); else emptyAppointments">
+
+    <table class="table">
+
+      <tbody>
+        <tr>
+          <td class="key"> Education </td>
+          <td class="value"> {{doctorProfile.education}} </td>
+        </tr>
+        <tr>
+          <td class="key"> Languages Spoken </td>
+          <td class="value"> {{doctorProfile.languagesSpoken}} </td>
+        </tr>
+        <tr>
+          <td class="key"> Board Certifications </td>
+          <td class="value"> {{doctorProfile.boardCertification}} </td>
+        </tr>
+        <tr>
+          <td class="key"> Specialty </td>
+          <td class="value"> {{doctorProfile.specialities}} </td>
+        </tr>
+        <tr>
+          <td class="key"> Affiliated Insurance </td>
+          <td class="value"> {{doctorProfile.affiliatedInsurance}} </td>
+        </tr>
+        <tr>
+          <td class="key"> Hospital Affliation </td>
+          <td class="value"> {{doctorProfile.hospitalAffliation}} </td>
+        </tr>
+        <tr>
+          <td class="key"> Professional Memberships </td>
+          <td class="value"> {{doctorProfile.professionalMemberships }} </td>
+        </tr>
+      </tbody>
+
+    </table>
+
+  </ng-container>
+
+  <ng-template #emptyAppointments>
+    <h2> Sorry,for the inconvenience <em> {{ doctorName }} </em> has not yet updated their Qualifications and Experience !!</h2>
+  </ng-template>
+
+  <br>
+  
+  <h3 id = "reviews"> {{profileModalTitle[1]}} </h3>
+  <ng-container *ngIf=" patientReviews && patientReviews.length; else emptyreviews">
+
+      <table class="table">
+          <thead>
+            <tr class = "key1">
+              <th class="col-md-2"> Patient Name </th>
+              <th class="col-md-2"> Date </th>
+              <th class="col-md-6"> Review </th>
+              <th class="col-md-2"> Rating </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id = "value1" *ngFor="let review of patientReviews">
+              <td class="col-md-2"> {{review.patientName}} </td>
+              <td class="col-md-2"> {{review.reviewDate | date:'medium'}} </td>
+              <td class="col-md-6"> {{review.review}} </td>
+              <td class="col-md-2">
+                <rating [(ngModel)]="review.rating" [max]="5" [readonly]="true" [float]="true"></rating>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    
+  </ng-container>
+
+  <ng-template #emptyreviews>
+    <h2> Sorry,for the inconvenience <em> {{ doctorName }} </em> have not got any reviews from past patients !!</h2>
+  </ng-template>
+
+</div>
+<br>
+
+
+<Customer-Footer></Customer-Footer>

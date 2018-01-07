@@ -1,0 +1,35 @@
+h1{
+    font-family: 'Trebuchet MS', 'Helvetica', 'sans-serif' ; 
+    margin : 100px 0 0 40px;
+    color : #c31795;
+}
+
+#experience{
+    font-family: 'Trebuchet MS', 'Helvetica', 'sans-serif' ; 
+    color : #E70953;
+    margin-left : 50px;
+}
+
+
+
+table { table-layout: fixed; }
+.key { 
+       width: 15%;
+       color : #E70953;
+       font-weight: bold;
+         }
+.value {width : 50%;}
+
+#reviews{
+    font-family: 'Trebuchet MS', 'Helvetica', 'sans-serif' ; 
+    color : #E9630A;
+    margin-left : 50px;
+}
+
+
+.key1 { 
+       width: 15%;
+       color : #E9630A;
+       font-weight: bold;
+         }
+.value1 {width : 50%;}

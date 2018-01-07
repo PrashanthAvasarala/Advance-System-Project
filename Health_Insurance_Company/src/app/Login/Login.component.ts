@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import {AuthenticationService} from './../RESTFul_API_Service/Authentication.Service';
+import { CustomerAuthGuard } from '../Customer/Customer_AuthGuard';
 
 "use strict";
 @Component({
@@ -12,13 +13,20 @@ import {AuthenticationService} from './../RESTFul_API_Service/Authentication.Ser
   })
   
 
-  export class LoginComponent {
+  export class LoginComponent extends CustomerAuthGuard {
 
     loginForm : FormGroup;
    
-    constructor(private fb : FormBuilder , private AuthService : AuthenticationService , private router:Router ){
-                      
-                this.loginFormValidation();
+    constructor(private fb : FormBuilder , private AuthService : AuthenticationService , private rout : Router){
+             super(rout);
+              if(this.customerData){
+                sessionStorage.removeItem("customerData");
+                window.sessionStorage.clear();
+                location.reload(true);
+                this.rout.navigate(['/']);
+            }
+
+              this.loginFormValidation();
                }
 
 
@@ -48,7 +56,7 @@ import {AuthenticationService} from './../RESTFul_API_Service/Authentication.Ser
             (result : any) => {
 
                 /* console.log(result); */
-                (result.user === "doctor")? this.router.navigate(['doctorHome', result.memberId]) : this.router.navigate(['home', result.memberId]); 
+                (result.user === "doctor")? this.rout.navigate(['doctorHome', result.memberId]) : this.rout.navigate(['home', result.memberId]); 
                 /* this.router.navigate(['home', result.memberId])      -->    It will look like this -->  http://localhost:3004/home/63236  
                 this.router.navigate(['home'],{ queryParams: { id: result.memberId } } ); -->   It will look like this -->  http://localhost:3004/home/?id=63236   */
                     

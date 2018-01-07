@@ -35,7 +35,9 @@
           <i class="fa fa-user-md" style="font-size:150px;color:#B1B1A5" title="Doctor Image coming soon"></i>
         </td>
         <td style="padding : 20px 0 0 60px;">
-          <h2 style=" font-family: 'Trebuchet MS', Helvetica, sans-serif ;"> {{docList.doctorName | uppercase}} </h2>
+            <a [ngStyle] = "pointer()" (click) = "setSelectedDoctorMemberId(docList.memberId , docList.doctorName , 'DocProfile')">
+                   <h2 style=" font-family: 'Trebuchet MS', Helvetica, sans-serif ;"> {{docList.doctorName | uppercase}} </h2>
+            </a>
           <!-- rating readonly -->
           <rating [(ngModel)]="docList.rating"  [readonly]="true" [max]="5"  style="font-size:22px;" > </rating>
           <p style="font-family : 'Trebuchet MS', Helvetica, sans-serif ;" title="Hospital Address">

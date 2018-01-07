@@ -3,7 +3,7 @@
 	background-image: url("app/Customer/Images/Health_Insurance_13.jpg");
 	background-size: cover; /* auto|length|cover|contain|initial|inherit; */
 	/* position : relative ; because of this image gets fixes in position  */ 
-	margin : -575px 0 50px 540px;
+	margin : -530px 0 50px 540px;
 	/* padding-left : 50px; */
 	/* background-color: #430F74; */
 	width: 800px;

@@ -76,8 +76,8 @@ var AppointmentModal = (function () {
             return this.availableTimes;
         }
         this.map = new Map();
-        this.myDate = new Date(2018, 0, 3);
-        this.map.set(this.myDate, [new Date(2018, 0, 3, 9, 0), new Date(2018, 0, 3, 12, 0), new Date(2018, 0, 3, 15, 0)]);
+        this.myDate = new Date(2018, 0, 10);
+        this.map.set(this.myDate, [new Date(2018, 0, 10, 9, 0), new Date(2018, 0, 10, 12, 0), new Date(2018, 0, 10, 15, 0)]);
         this.map.set(new Date(2018, 1, 8), [new Date(2018, 1, 8, 8, 0), new Date(2018, 1, 8, 12, 0), new Date(2018, 1, 8, 15, 0)]);
         this.map.set(new Date(2018, 1, 9), [new Date(2018, 1, 9, 10, 0), new Date(2018, 1, 9, 12, 0), new Date(2018, 1, 9, 13, 0)]);
         // console.log("my date", this.myDate);
@@ -85,7 +85,7 @@ var AppointmentModal = (function () {
         // console.log("check in the map", this.map.get(this.myDate));
         // console.log("keys length", this.map.keys());
         this.map.forEach(function (value, key) {
-            /* console.log("date entered is ", dates.getDate() , "Month entered is ", dates.getMonth() );
+            /* console.log("date entered is ", dates.getDate() , "Month entered is ", dates.getMonth() , "Hour of the day" , dates.getHours());
                console.log("date from databse is ", key.getDate() , "Month from databse is ", key.getMonth() ); */
             _this.errorMessage = '';
             if (key.getDate() == dates.getDate() && key.getMonth() == dates.getMonth()) {
@@ -106,13 +106,13 @@ var AppointmentModal = (function () {
         };
         this.appoint.blockedDates(entries)
             .subscribe(function (result) {
-            console.log(result.listOfBlockedDates);
+            console.log("Blocked dates for this doctor", result.listOfBlockedDates);
             for (var _i = 0, _a = result.listOfBlockedDates; _i < _a.length; _i++) {
                 var data = _a[_i];
                 //booke.push(new Date(data).toLocaleDateString());
                 _this.blocks.push(new Date(data));
             }
-            console.log(_this.blocks);
+            console.log("Blocked dates added in array", _this.blocks);
         });
     };
     AppointmentModal.prototype.bookAppoint = function () {
@@ -130,13 +130,15 @@ var AppointmentModal = (function () {
                 doctorMemberId: this.doctorMemberId
             };
             if (this.bookedDate.getTime() >= (Date.now() + 8.64e+7)) {
-                console.log(entries);
+                //console.log(entries);
+                //console.log("selected date and hours - I" , this.bookedDate.getHours());
                 var temp;
                 for (var _i = 0, _a = this.blocks; _i < _a.length; _i++) {
                     var data = _a[_i];
-                    var selectedDate = this.bookedDate.setHours(0, 0, 0, 0);
+                    console.log("Blocked date in the loop", data);
+                    var selectedDate = this.bookedDate;
                     //var bookedDate = data.setHours(0, 0, 0, 0);
-                    if (selectedDate.valueOf() === data.setHours(0, 0, 0, 0).valueOf()) {
+                    if (selectedDate.valueOf() === data.valueOf()) {
                         temp = true;
                         break;
                     }
@@ -145,17 +147,26 @@ var AppointmentModal = (function () {
                     }
                 }
                 if (!temp) {
-                    this.appoint.bookAppointmentForDoctor(entries)
-                        .subscribe(function (result) {
-                        window.alert(result);
-                        (result) ? _this.route.navigate(['home/' + _this.patientData.memberId]) : null;
-                    }, function (err) {
-                        window.alert(err);
-                        if (err) {
-                            _this.consultingReason.clear();
-                            _this.route.navigate(['home/' + _this.patientData.memberId]);
-                        }
-                    });
+                    //console.log("selected date and hours - II" , this.bookedDate.getHours());
+                    if (this.bookedDate.getHours() > 7 && this.bookedDate.getHours() < 20) {
+                        console.log("I'm booking the date ", entries.appointDate);
+                        this.appoint.bookAppointmentForDoctor(entries)
+                            .subscribe(function (result) {
+                            _this.blocks = null;
+                            window.alert(result);
+                            (result) ? _this.route.navigate(['home/' + _this.patientData.memberId]) : null;
+                        }, function (err) {
+                            window.alert(err);
+                            if (err) {
+                                _this.consultingReason.clear();
+                                _this.route.navigate(['home/' + _this.patientData.memberId]);
+                            }
+                        });
+                    }
+                    else {
+                        window.alert(" Appointment not booked , You need to check doctors availability timings " +
+                            "Then select the timing for the day");
+                    }
                 }
                 else {
                     window.alert("We are sorry appointment has already booked!!" +

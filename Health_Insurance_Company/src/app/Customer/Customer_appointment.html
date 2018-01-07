@@ -17,12 +17,12 @@
                         
                          <!--  Consulting Field ,id = 'txt' for CSS purpose -->
 
-                        <input id ="txt"  type="text"  list="reason"  formControlName="reason" placeholder="Consulting reason / doctor name">
+                        <!-- <input id ="txt"  type="text"  list="reason"  formControlName="reason" placeholder="Consulting reason / doctor name">
                         <datalist id="reason">
                             <option *ngFor="let consultingReason of reasonList" value="{{consultingReason}}" ></option>
                         </datalist>
 
-                        <p *ngIf="(searchForm.get('reason').hasError('required') && searchForm.get('reason').touched)"> Please select or enter , the Consulting reason or Doctor's Name </p>
+                        <p *ngIf="(searchForm.get('reason').hasError('required') && searchForm.get('reason').touched)"> Please select or enter , the Consulting reason or Doctor's Name </p> -->
                        
                          <!--  Zipcode Field ,id = 'txt' for CSS purpose -->
 
@@ -44,7 +44,7 @@
 
                         <!-- Search button will be enabled after touching both the Doctor and zip fields -->
 
-                        <button type="submit" class="btn btn-primary btn-lg" [disabled]="!((searchForm.get('reason').value && searchForm.get('zipcode').value && searchForm.get('carrier').value))">
+                        <button type="submit" class="btn btn-primary btn-lg" [disabled]="!((searchForm.get('zipcode').value && searchForm.get('carrier').value))">
                                      Search &nbsp;<span class="glyphicon glyphicon-search"></span></button>
                     </form>
 

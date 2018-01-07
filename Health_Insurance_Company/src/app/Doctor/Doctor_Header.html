@@ -300,7 +300,9 @@
 
             <div class="form-group">
               <label for="education">Education</label>
-              <input type="text" class="form-control" id="education" [(ngModel)]="doctorProfile.education" name="education" pattern="^[a-zA-Z.]+(,\s[a-zA-Z.]+)*$"
+              <!-- pattern="^[a-zA-Z.]+(,\s[a-zA-Z.]+)*$" -->
+              <input type="text" class="form-control" id="education" [(ngModel)]="doctorProfile.education" name="education" 
+                pattern="^((?!\d)(?![!@#$*%^])[a-zA-z,)/.(-\s])+$"
                 required>
             </div>
 

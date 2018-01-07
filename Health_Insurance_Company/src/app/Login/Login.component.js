@@ -1,4 +1,9 @@
 "use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12,13 +17,23 @@ var core_1 = require("@angular/core");
 var forms_1 = require("@angular/forms");
 var router_1 = require("@angular/router");
 var Authentication_Service_1 = require("./../RESTFul_API_Service/Authentication.Service");
+var Customer_AuthGuard_1 = require("../Customer/Customer_AuthGuard");
 "use strict";
-var LoginComponent = (function () {
-    function LoginComponent(fb, AuthService, router) {
-        this.fb = fb;
-        this.AuthService = AuthService;
-        this.router = router;
-        this.loginFormValidation();
+var LoginComponent = (function (_super) {
+    __extends(LoginComponent, _super);
+    function LoginComponent(fb, AuthService, rout) {
+        var _this = _super.call(this, rout) || this;
+        _this.fb = fb;
+        _this.AuthService = AuthService;
+        _this.rout = rout;
+        if (_this.customerData) {
+            sessionStorage.removeItem("customerData");
+            window.sessionStorage.clear();
+            location.reload(true);
+            _this.rout.navigate(['/']);
+        }
+        _this.loginFormValidation();
+        return _this;
     }
     /* Login Form validation */
     LoginComponent.prototype.loginFormValidation = function () {
@@ -37,7 +52,7 @@ var LoginComponent = (function () {
         this.AuthService.loginAuthentication(loginData)
             .subscribe(function (result) {
             /* console.log(result); */
-            (result.user === "doctor") ? _this.router.navigate(['doctorHome', result.memberId]) : _this.router.navigate(['home', result.memberId]);
+            (result.user === "doctor") ? _this.rout.navigate(['doctorHome', result.memberId]) : _this.rout.navigate(['home', result.memberId]);
             /* this.router.navigate(['home', result.memberId])      -->    It will look like this -->  http://localhost:3004/home/63236
             this.router.navigate(['home'],{ queryParams: { id: result.memberId } } ); -->   It will look like this -->  http://localhost:3004/home/?id=63236   */
             /* var obj = JSON.parse(sessionStorage.userData);
@@ -48,7 +63,7 @@ var LoginComponent = (function () {
         });
     };
     return LoginComponent;
-}());
+}(Customer_AuthGuard_1.CustomerAuthGuard));
 LoginComponent = __decorate([
     core_1.Component({
         selector: 'login-page',

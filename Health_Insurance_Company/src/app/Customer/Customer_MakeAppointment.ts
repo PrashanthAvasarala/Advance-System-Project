@@ -101,8 +101,8 @@ export class AppointmentModal {
        }
 
     this.map = new Map();
-    this.myDate = new Date(2018, 0, 3);
-    this.map.set(this.myDate, [new Date(2018, 0, 3, 9, 0), new Date(2018, 0, 3, 12, 0), new Date(2018, 0, 3, 15, 0)]);
+    this.myDate = new Date(2018, 0, 10);
+    this.map.set(this.myDate, [new Date(2018, 0, 10, 9, 0), new Date(2018, 0, 10, 12, 0), new Date(2018, 0, 10, 15, 0)]);
     this.map.set(new Date(2018, 1, 8), [new Date(2018, 1, 8, 8, 0), new Date(2018, 1, 8, 12, 0), new Date(2018, 1, 8, 15, 0)]);
     this.map.set(new Date(2018, 1, 9), [new Date(2018, 1, 9, 10, 0), new Date(2018, 1, 9, 12, 0), new Date(2018, 1, 9, 13, 0)]);
 
@@ -114,7 +114,7 @@ export class AppointmentModal {
     
 
     this.map.forEach((value: any, key: Date) => {
-      /* console.log("date entered is ", dates.getDate() , "Month entered is ", dates.getMonth() );
+      /* console.log("date entered is ", dates.getDate() , "Month entered is ", dates.getMonth() , "Hour of the day" , dates.getHours());
          console.log("date from databse is ", key.getDate() , "Month from databse is ", key.getMonth() ); */
         this.errorMessage = '';
       if (key.getDate() == dates.getDate() && key.getMonth() == dates.getMonth()) {
@@ -144,14 +144,14 @@ export class AppointmentModal {
       .subscribe(
 
       (result: any) => {
-        console.log(result.listOfBlockedDates);
+        console.log("Blocked dates for this doctor",result.listOfBlockedDates);
         for (let data of result.listOfBlockedDates) {
 
           //booke.push(new Date(data).toLocaleDateString());
           this.blocks.push(new Date(data));
         }
 
-        console.log(this.blocks);
+        console.log("Blocked dates added in array",this.blocks);
 
       });
   }
@@ -160,7 +160,7 @@ export class AppointmentModal {
 
 
   bookAppoint() {
-
+    
     if (this.bookedDate && this.consultingReason) {
       var entries = <any>{}
       entries = {
@@ -175,13 +175,16 @@ export class AppointmentModal {
       }
 
       if (this.bookedDate.getTime() >= (Date.now() + 8.64e+7)) {
-        console.log(entries);
+        //console.log(entries);
+        //console.log("selected date and hours - I" , this.bookedDate.getHours());
         var temp;
         for (let data of this.blocks) {
-          var selectedDate = this.bookedDate.setHours(0, 0, 0, 0);
+
+          console.log("Blocked date in the loop", data);
+          var selectedDate = this.bookedDate;
           //var bookedDate = data.setHours(0, 0, 0, 0);
 
-          if (selectedDate.valueOf() === data.setHours(0, 0, 0, 0).valueOf()) {
+          if (selectedDate.valueOf() === data.valueOf()) {
             temp = true;
             break;
           } else { temp = false; }
@@ -190,9 +193,13 @@ export class AppointmentModal {
         }
 
         if (!temp) {
+          //console.log("selected date and hours - II" , this.bookedDate.getHours());
+          if(this.bookedDate.getHours() > 7 && this.bookedDate.getHours() < 20){
+            console.log("I'm booking the date " ,entries.appointDate);
           this.appoint.bookAppointmentForDoctor(entries)
             .subscribe(
             (result: any) => {
+              this.blocks = null;
               window.alert(result);
               (result) ? this.route.navigate(['home/' + this.patientData.memberId]) : null;
             },
@@ -203,6 +210,10 @@ export class AppointmentModal {
                 this.route.navigate(['home/' + this.patientData.memberId]);
               }
             });
+          }else{
+            window.alert(" Appointment not booked , You need to check doctors availability timings "+
+                        "Then select the timing for the day");
+          }
         } else {
 
           window.alert("We are sorry appointment has already booked!!" +

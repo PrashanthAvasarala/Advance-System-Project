@@ -32,7 +32,7 @@ import { Router } from '@angular/router';
           }
   
           /* Validation for each and every form field */
-          /*Test RegExp here - 'https://www.regexpal.com/'*/
+          /*Test RegExp here - 'https://www.regexpal.com/' or https://regex101.com/r/iA5bT1/1 */
 
           createForm(){
             this.entryForm = this.fb.group({

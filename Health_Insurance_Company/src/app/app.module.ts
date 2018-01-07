@@ -31,6 +31,7 @@ import { DoctorNearBy } from './Customer/Doctor_NearBy';
 import { AppointmentModal } from './Customer/Customer_MakeAppointment';
 import { ReviewModal } from './Customer/Add_Review';
 import { DeleteAppoint } from './Customer/Delete_Appointment';
+import { DoctorProfileView } from './Customer/Customer_DoctorProfile';
 
 /* Doctor-View*/
 
@@ -48,6 +49,7 @@ import { CustomerService } from './RESTFul_API_Service/Customer.Home.service';
 import { EmailNotification } from './RESTFul_API_Service/Email.Notifications.Service'
 import { AppointmentService } from './RESTFul_API_Service/Appointment.service';
 import { DoctorHomeService } from './RESTFul_API_Service/Doctor.Home.service';
+
 
 
 
@@ -75,6 +77,7 @@ const appRoutes: Routes = [
       // From Login.component.ts it will come to  router.navigate(['home'])--> CustomerHomeView --> CustomerAuthGuard = true
       { path: 'home/:', component: CustomerHomeView },
       { path: 'home/:id/appointment', component: Appointment },
+      { path: 'home/:id/appointment/doctor-profile/:docList.memberId', component: DoctorProfileView },
       { path: 'home/:id/delete-appointment', component: DeleteAppoint },
       { path: 'home/:id/appointment/docAppoint' , component : AppointmentModal},
       { path: 'home/:id/appointment/docAppoint/:docId/addReview' , component : ReviewModal},
@@ -131,6 +134,7 @@ const appRoutes: Routes = [
     AppointmentModal,
     ReviewModal,
     DeleteAppoint,
+    DoctorProfileView,
 
     /*Doctor-View*/
 

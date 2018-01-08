@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 03, 2018 at 07:21 AM
+-- Generation Time: Jan 09, 2018 at 12:09 AM
 -- Server version: 10.1.28-MariaDB
 -- PHP Version: 7.1.10
 
@@ -42,6 +42,10 @@ CREATE TABLE IF NOT EXISTS `appointment_doctors_list` (
   `carrier` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`member_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- RELATIONSHIPS FOR TABLE `appointment_doctors_list`:
+--
 
 --
 -- Dumping data for table `appointment_doctors_list`
@@ -87,6 +91,10 @@ CREATE TABLE IF NOT EXISTS `customer_table` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
+-- RELATIONSHIPS FOR TABLE `customer_table`:
+--
+
+--
 -- Dumping data for table `customer_table`
 --
 
@@ -100,8 +108,9 @@ INSERT INTO `customer_table` (`member_id`, `role`, `first_name`, `last_name`, `a
 (61212, 'customer', 'Ramya', 'shillpa', 25, 9000124440, '23 Groover St', 'Delaware', 62034, 'PA', 'Ramya.94@gmail.com', 'arqWd81/n3V9f0FACElKAQ=='),
 (62985, 'customer', 'Sai Krishna', 'Reddy', 25, 8167723506, '8630 Chestnut Cir', 'Kansas City', 64131, 'MO', 'saisun229@gmail.com', 'BX/Zl2tobgR8s8+cA6f/bA=='),
 (67860, 'customer', 'Saitej', 'Vadlamani', 26, 4442310680, '63 Gay St', 'Prussia', 50601, 'FA', 'Saitej.786@gmail.com', '2U4u01174JN52EhnHaPbsg=='),
-(64442, 'customer', 'Sandeep ', 'Avasarala', 25, 8166210680, '64 Surrey Way', 'Exton', 19341, 'PA', 'sandeep92.avasarala@gmail.com', 'piNVOpZ4xMejP1Z3GrI4xA=='),
+(66785, 'customer', 'Sandeep ', 'Avasarala', 25, 8166210680, '64 Surrey Way', 'Exton', 19341, 'PA', 'sandeep92.avasarala@gmail.com', 'piNVOpZ4xMejP1Z3GrI4xA=='),
 (60404, 'customer', 'Satya Phani', 'Meduri', 28, 6210681223, '53 Heritage Ln', 'Exton', 19341, 'PA', 'satya.28@gmail.com', 'Bs4qGAJZqNXubjooj2Zalg=='),
+(66853, 'customer', 'sdc', 'sad', 56, 7894561230, 's', 'mo', 89654, 'mo', 'k@3.com', 'EF4iCowaY6oslnnTN65Etw=='),
 (65151, 'customer', 'Sravan', 'Vanga', 26, 6060121789, '23 Avenue St', 'Malvern', 64093, 'PA', 'sravan.kpf@gmail.com', 'ofM6d1qkbSYVLMQb3lJuMA==');
 
 -- --------------------------------------------------------
@@ -124,6 +133,10 @@ CREATE TABLE IF NOT EXISTS `doctor_availability_list` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
+-- RELATIONSHIPS FOR TABLE `doctor_availability_list`:
+--
+
+--
 -- Dumping data for table `doctor_availability_list`
 --
 
@@ -143,6 +156,52 @@ INSERT INTO `doctor_availability_list` (`member_id`, `first_name`, `rating`, `ad
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `doctor_calendar`
+--
+-- Creation: Jan 08, 2018 at 05:27 AM
+--
+
+DROP TABLE IF EXISTS `doctor_calendar`;
+CREATE TABLE IF NOT EXISTS `doctor_calendar` (
+  `member_id` int(11) NOT NULL,
+  `timeslot` datetime NOT NULL,
+  PRIMARY KEY (`member_id`,`timeslot`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- RELATIONSHIPS FOR TABLE `doctor_calendar`:
+--
+
+--
+-- Dumping data for table `doctor_calendar`
+--
+
+INSERT INTO `doctor_calendar` (`member_id`, `timeslot`) VALUES
+(65730, '2018-01-07 08:15:00'),
+(65730, '2018-01-07 08:30:00'),
+(65730, '2018-01-09 18:15:00'),
+(65730, '2018-01-10 08:00:00'),
+(65730, '2018-01-10 09:00:00'),
+(65730, '2018-01-10 09:15:00'),
+(65730, '2018-01-10 09:30:00'),
+(65730, '2018-01-10 12:00:00'),
+(65730, '2018-01-11 08:00:00'),
+(65730, '2018-01-11 15:30:00'),
+(65730, '2018-01-12 17:45:00'),
+(65730, '2018-01-17 09:00:00'),
+(65730, '2018-01-20 09:45:00'),
+(65730, '2018-01-24 13:45:00'),
+(69544, '2018-01-25 11:00:00'),
+(69544, '2018-01-26 10:00:00'),
+(69544, '2018-01-27 11:00:00'),
+(69544, '2018-01-31 09:00:00'),
+(69544, '2018-01-31 11:00:00'),
+(69544, '2018-02-01 10:00:00'),
+(69544, '2018-03-03 10:00:00');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `doctor_profile`
 --
 -- Creation: Nov 28, 2017 at 10:29 AM
@@ -153,15 +212,19 @@ CREATE TABLE IF NOT EXISTS `doctor_profile` (
   `doctor_member_id` int(11) NOT NULL,
   `first_name` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `last_name` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `education` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `education` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
   `hospital_affliation` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `languages` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `professional_Memberships` varchar(75) COLLATE utf8_unicode_ci NOT NULL,
-  `board_certification` varchar(75) COLLATE utf8_unicode_ci NOT NULL,
-  `affliated_insurance` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `professional_Memberships` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `board_certification` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `affliated_insurance` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `specialities` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`doctor_member_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- RELATIONSHIPS FOR TABLE `doctor_profile`:
+--
 
 --
 -- Dumping data for table `doctor_profile`
@@ -169,8 +232,9 @@ CREATE TABLE IF NOT EXISTS `doctor_profile` (
 
 INSERT INTO `doctor_profile` (`doctor_member_id`, `first_name`, `last_name`, `education`, `hospital_affliation`, `languages`, `professional_Memberships`, `board_certification`, `affliated_insurance`, `specialities`) VALUES
 (12345, 'Sandeep Updated', 'Avasarala Venkata', 'M.s, Btech', 'Paoli Hospital', 'English', 'American Academy of Family Physicians', 'American Board of Family Medicine', 'Aetna', 'Family Physician'),
-(65730, 'bj', 'gjm', 'klasdb', 'klasdb', 'kldx', 'asdbjk aklds', 'dksald klds', 'kladbn anskldsp', 'bkadlb akdls'),
-(69544, 'Arthur E', 'Perpall', 'M.s, Btech', 'Paoli Hospital', 'English', 'American Academy of Family Physicians', 'American Board of Family Medicine', 'Aetna and first health ', 'Family Physician ');
+(61302, 'Tu', 'Dinh', 'Medical School - New York University, Doctor of Medicine\r\nColumbia University (Bachelor’s)\r\nUniversity of Miami Hospital, Internship in Internal Medicine\r\nUniversity of Miami Hospital, Residency in Internal Medicine\r\nUniversity of Miami Hospital, Fellowship in Medical Oncology', 'Einstein Medical Center Philadelphia', 'English , Latino , Hindi', 'American Academy of Optometrist', 'American Board of Internal Medicine,\r\nMedical Oncology (Internal Medicine)', 'Caterpillar, Anthem Blue Cross Blue Shield ,First Health Insurance , Companion Life - Worker\'s Comp ,Triple-S Salud: Blue Cross Blue Shield of Puerto Rico', 'Optometrist , Eye'),
+(65730, 'Xavier', 'Antony', 'Medical School - State University of New York, Downstate Medical Center, Doctor of Medicine Long Island College Hospital (Residency)NewYork-Presbyterian Hospital / Columbia University Medical Center (Fellowship)Columbia-Presbyterian Medical Center, Fellowship in Rheumatic Diseases', 'Golden Valley Memorial Hospital', 'English , Spanish , French , Hindi', 'American Academy of Wound Care Specialist', 'New York Academy of Medicine', 'American Healthcare Alliance , First Health Insurance , First Choice Health - PPO, Wellmark Blue Cross Blue Shield , Independence Blue Cross - National BlueCard PPO', 'Wound Care Specialist'),
+(69544, 'Arthur E', 'Perpall', 'Medical School - A.T. Still University, Mesa, Doctor of Osteopathic Medicine\r\nSouthern Colorado Family Medicine, Residency in Family Medicine', 'Paoli Hospital', 'English , Russian', 'American Academy of Family Physicians', 'American Board of Internal Medicine', 'Aetna, First Health Insurance , Independence Blue Cross - National BlueCard PPO,WEA Trust - Fox River Network  Tier one Providers', 'Family Physician ');
 
 -- --------------------------------------------------------
 
@@ -193,6 +257,10 @@ CREATE TABLE IF NOT EXISTS `doctor_table` (
   `password` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`phone`,`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- RELATIONSHIPS FOR TABLE `doctor_table`:
+--
 
 --
 -- Dumping data for table `doctor_table`
@@ -224,6 +292,10 @@ CREATE TABLE IF NOT EXISTS `email_notifications` (
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
+-- RELATIONSHIPS FOR TABLE `email_notifications`:
+--
+
+--
 -- Dumping data for table `email_notifications`
 --
 
@@ -250,7 +322,7 @@ INSERT INTO `email_notifications` (`serial_number`, `email_id`) VALUES
 --
 -- Table structure for table `patient_appointments`
 --
--- Creation: Dec 02, 2017 at 10:32 PM
+-- Creation: Jan 05, 2018 at 07:11 AM
 --
 
 DROP TABLE IF EXISTS `patient_appointments`;
@@ -263,38 +335,42 @@ CREATE TABLE IF NOT EXISTS `patient_appointments` (
   `appointment_date` datetime NOT NULL,
   `reason` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
   `doctor_member_id` int(11) NOT NULL,
-  PRIMARY KEY (`member_id`,`appointment_date`)
+  PRIMARY KEY (`appointment_date`,`doctor_member_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- RELATIONSHIPS FOR TABLE `patient_appointments`:
+--
 
 --
 -- Dumping data for table `patient_appointments`
 --
 
 INSERT INTO `patient_appointments` (`member_id`, `first_name`, `last_name`, `contact_num`, `carrier`, `appointment_date`, `reason`, `doctor_member_id`) VALUES
-(61431, 'Deepthi', 'Chowdary', '8163720480', 'First Health Insurance', '2017-12-20 09:00:00', 'Pain in heart and heart broken coz of life partner.', 61302),
-(62985, 'Sai Krishna', 'Reddy', '8167723506', 'irst Health Insurance', '2017-12-07 09:23:00', 'Bleeding/cuts -- not bleeding a lot but requiring stitches and General check up', 69544),
-(63236, 'Chaitanya Prashanth', 'Avasarala Venkata', '8163725650', 'Corvel - Group Health', '2017-11-11 23:31:15', 'finger cut', 65730),
-(63236, 'Chaitanya Prashanth', 'Avasarala Venkata', '8163725650', 'WEA Trust - Fox River Network: Tier 1 Providers', '2017-12-03 05:16:00', 'Minor broken bones and fractures (i.e. fingers, toes)\r\nModerate back problems', 61304),
-(63236, 'Chaitanya Prashanth', 'Avasarala Venkata', '8163725650', 'Clover Health - Prestige', '2017-12-20 00:00:00', '(Signs of)Stroke (e.g. loss of vision, sudden numbness, weakness, slurred speech, or confusion)', 61300),
-(63236, 'Chaitanya Prashanth', 'Avasarala Venkata', '8163725650', 'EmblemHealth - 9/11 Program', '2017-12-26 08:23:30', 'Urinary tract infections\r\nVomiting, diarrhea or dehydration', 61504),
-(63236, 'Chaitanya Prashanth', 'Avasarala Venkata', '8163725650', 'WEA Trust - Fox River Network: Tier 1 Providers', '2017-12-29 08:23:00', 'nearsightedness, or blurred vision when looking at faraway objects.\r\ncataracts, or clouding of the eye\'s lens.', 61502),
-(63236, 'Chaitanya Prashanth', 'Avasarala Venkata', '8163725650', 'EmblemHealth - 9/11 Program', '2017-12-29 08:23:30', 'retinitis pigmentosa, which occurs when dark pigment collects in your retina and creates tunnel vision.', 61500),
-(64782, 'harish', 'venkateswawaran', '8019974984', 'First Health Insurance', '2017-12-07 20:26:30', 'vasa', 61300),
-(66775, 'Ravi Teja', 'Sankati', '8161234569', 'First Health Insurance', '2017-11-27 08:45:00', 'Cosultation/General Follow up about Leg Sprain. Follow Up after Minor Surgery', 69544),
-(66776, 'Rahul', 'Gubbala', '7564581232', 'First Health Insurance', '2017-11-20 09:15:00', 'Cosultation/General Follow up about Leg Sprain. Follow Up after Minor Surgery', 69544),
-(66777, 'Rahul', 'Sayini', '9064567890', 'First Health Insurance', '2017-12-11 14:30:00', 'Cosultation/General Follow up about Leg Sprain. Follow Up after Minor Surgery', 69544),
-(66778, 'Anurag', 'Mysari', '8790464822', 'First Health Insurance', '2017-11-20 09:00:00', 'Cosultation/General Follow up about Leg Sprain. Follow Up after Minor Surgery', 69544),
-(66779, 'Harsha', 'Chowdary', '9063951642', 'First Health Insurance', '2017-11-20 04:00:00', 'Minor Surgery about Girls Weakness, also called Google Voice Number. It is a common childhood illness. Pinkeye usually makes the whites of your eyes turn red.', 69544),
-(66780, 'Adithya', 'Narala', '8166218956', 'First Health Insurance', '2017-11-20 03:30:00', 'Minor Surgery about Nerves Weakness, also called conjunctivitis. It is a common childhood illness. Pinkeye usually makes the whites of your eyes turn red.', 69544),
-(66781, 'Ramya', 'Muppala', '9063951642', 'First Health Insurance', '2017-11-20 02:30:00', 'Minor Surgery about Pinkeye, also called conjunctivitis. It is a common childhood illness. Pinkeye usually makes the whites of your eyes turn red.', 69544),
-(66782, 'Deepthi', 'Muppala', '9063951642', 'First Health Insurance', '2017-12-06 17:30:00', 'Cosultation/General Follow up about Leg Sprain', 69544),
 (66783, 'Ritish', 'Varma Datla', '8790464822', 'First Health Insurance', '0000-00-00 00:00:00', 'Minor Surgery about Pink eye, also called conjunctivitis. It is a common childhood illness. Pinkeye usually makes the whites of your eyes turn red.', 69544),
+(66780, 'Adithya', 'Narala', '8166218956', 'First Health Insurance', '2017-11-20 03:30:00', 'Minor Surgery about Nerves Weakness, also called conjunctivitis. It is a common childhood illness. Pinkeye usually makes the whites of your eyes turn red.', 69544),
+(66779, 'Harsha', 'Chowdary', '9063951642', 'First Health Insurance', '2017-11-20 04:00:00', 'Minor Surgery about Girls Weakness, also called Google Voice Number. It is a common childhood illness. Pinkeye usually makes the whites of your eyes turn red.', 69544),
+(66778, 'Anurag', 'Mysari', '8790464822', 'First Health Insurance', '2017-11-20 09:00:00', 'Cosultation/General Follow up about Leg Sprain. Follow Up after Minor Surgery', 69544),
+(66776, 'Rahul', 'Gubbala', '7564581232', 'First Health Insurance', '2017-11-20 09:15:00', 'Cosultation/General Follow up about Leg Sprain. Follow Up after Minor Surgery', 69544),
+(66775, 'Ravi Teja', 'Sankati', '8161234569', 'First Health Insurance', '2017-11-27 08:45:00', 'Cosultation/General Follow up about Leg Sprain. Follow Up after Minor Surgery', 69544),
 (66784, 'Sudeep', 'Reddy', '8790464822', 'First Health Insurance', '2017-12-06 12:30:00', 'Minor Surgery about Pink eye, also called conjunctivitis. It is a common childhood illness. Pinkeye usually makes the whites of your eyes turn red.', 69544),
-(66785, 'Sandeep', 'Venkata', '8790464822', 'First Health Insurance', '2017-11-18 12:30:00', 'Minor Surgery about Pinkeye, also called conjunctivitis. It is a common childhood illness. Pinkeye usually makes the whites of your eyes turn red.', 69544),
-(66786, 'Pavan', 'Reddy vanga', '8790464822', 'First Health Insurance', '2017-11-18 11:30:00', 'follow Up on Appenticitis Operation', 69544),
-(66787, 'Sravan', 'Reddy Reva', '8790464822', 'First Health Insurance', '2017-11-18 12:00:00', 'Cosultation/General Follow up about Leg Sprain', 69544),
+(66782, 'Deepthi', 'Muppala', '9063951642', 'First Health Insurance', '2017-12-06 17:30:00', 'Cosultation/General Follow up about Leg Sprain', 69544),
+(62985, 'Sai Krishna', 'Reddy', '8167723506', 'irst Health Insurance', '2017-12-07 09:23:00', 'Bleeding/cuts -- not bleeding a lot but requiring stitches and General check up', 69544),
+(64782, 'harish', 'venkateswawaran', '8019974984', 'First Health Insurance', '2017-12-07 20:26:30', 'vasa', 61300),
+(66789, 'Chaithanya', 'prashanth', '8790464822', 'First Health Insurance', '2017-12-08 09:30:00', 'Follow Up after Minor Surgery', 69544),
+(66777, 'Rahul', 'Sayini', '9064567890', 'First Health Insurance', '2017-12-11 14:30:00', 'Cosultation/General Follow up about Leg Sprain. Follow Up after Minor Surgery', 69544),
 (66788, 'Dileep', 'Thallapally', '8790464822', 'First Health Insurance', '2017-12-12 16:29:00', 'Minor Surgery on Retina', 61300),
-(66789, 'Chaithanya', 'prashanth', '8790464822', 'First Health Insurance', '2017-12-08 09:30:00', 'Follow Up after Minor Surgery', 69544);
+(61431, 'Deepthi', 'Chowdary', '8163720480', 'First Health Insurance', '2017-12-20 09:00:00', 'Pain in heart and heart broken coz of life partner.', 61302),
+(63236, 'Chaitanya Prashanth', 'Avasarala Venkata', '8163725650', 'Caterpillar - Caterpillar Network Plan', '2018-01-09 18:15:00', 'fhjn', 65730),
+(63236, 'Chaitanya Prashanth', 'Avasarala Venkata', '8163725650', 'WEA Trust - Fox River Network: Tier 1 Providers', '2018-01-10 15:00:00', 'jmb', 61300),
+(67860, 'Saitej', 'Vadlamani', '4442310680', 'WEA Trust - Fox River Network: Tier 1 Providers', '2018-01-11 08:00:00', 'gjkv', 65730),
+(66785, 'Sandeep', 'Venkata', '8790464822', 'First Health Insurance', '2018-01-18 12:30:00', 'Minor Surgery about Pinkeye, also called conjunctivitis. It is a common childhood illness. Pinkeye usually makes the whites of your eyes turn red.', 69544),
+(66787, 'Sravan', 'Reddy Reva', '8790464822', 'First Health Insurance', '2018-01-18 17:00:00', 'Cosultation/General Follow up about Leg Sprain', 69544),
+(63236, 'Chaitanya Prashanth', 'Avasarala Venkata', '8163725650', 'Companion Life - Worker\'s Comp', '2018-01-25 11:00:00', 'fhmj', 69544),
+(63236, 'Chaitanya Prashanth', 'Avasarala Venkata', '8163725650', 'WEA Trust - Fox River Network: Tier 1 Providers', '2018-02-03 05:16:00', 'Minor broken bones and fractures (i.e. fingers, toes)\r\nModerate back problems', 61304),
+(54321, 'sandip', 'Venkata', '8163725600', 'polo', '2018-02-10 11:00:00', 'gee', 12345),
+(66786, 'Pavan', 'Reddy vanga', '8790464822', 'First Health Insurance', '2018-02-18 11:30:00', 'follow Up on Appenticitis Operation', 69544),
+(66781, 'Ramya', 'Muppala', '9063951642', 'First Health Insurance', '2018-02-20 02:30:00', 'Minor Surgery about Pinkeye, also called conjunctivitis. It is a common childhood illness. Pinkeye usually makes the whites of your eyes turn red.', 69544);
 
 -- --------------------------------------------------------
 
@@ -312,6 +388,10 @@ CREATE TABLE IF NOT EXISTS `patient_lab_reports` (
   `type` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`member_id`,`doctor_member_id`,`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- RELATIONSHIPS FOR TABLE `patient_lab_reports`:
+--
 
 --
 -- Dumping data for table `patient_lab_reports`
@@ -343,12 +423,17 @@ CREATE TABLE IF NOT EXISTS `patient_reviews` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
+-- RELATIONSHIPS FOR TABLE `patient_reviews`:
+--
+
+--
 -- Dumping data for table `patient_reviews`
 --
 
 INSERT INTO `patient_reviews` (`member_id`, `doctor_member_id`, `review`, `review_date`, `rating`) VALUES
 (61431, 69544, 'Treatment was good , But little wait time.\nUsed very sophisticated instruments', '2017-12-05 00:00:00', 3.44444),
 (63236, 65730, 'Good Bedside manner and Doctor timing is punctual .prescribed correct medication.', '2017-11-30 09:38:15', 3.5),
+(63236, 69544, 'wer', '2018-01-05 03:18:04', 1.33333),
 (66775, 69544, 'I am very active and with that has come my share of mishaps. Dr Mastey explains exactly what is wrong and how we are going to repair. I sincerely trust him, his medical knowledge and his judgment. The entire staff is friendly and makes you feel at ease even through some not-so-easy time.', '2017-11-27 08:45:00', 3.5),
 (66776, 69544, 'When I found out I was pregnant with my first child, I was hoping to find an OB who I could trust to have my best interest in mind. My husband did his research and found Dr. Brown to be recommended as one of the best doctors in the area. Throughout the entire pregnancy, Dr. Brown, Erin (midwife) and staff were nothing short of phenomenal! They are friendly, professional, and take the time to answer any questions you might have.', '2017-11-27 09:45:00', 4.2),
 (66782, 69544, '\"I absolutely love this office. Front desk is always friendly, Kruthi is fantastic, and Dr. Sandeep couldn\'t be more caring. They can generally get you in for an appointment very quickly if need be. I had an issue that I called for yesterday and Kruthi answered my questions on the phone and then Dr. Sandeep i called me back to check on me today. I\'ve never had better or more personal care from a healthcare team.\"', '2017-11-27 10:45:00', 4.3),
@@ -370,6 +455,10 @@ CREATE TABLE IF NOT EXISTS `specialty` (
   `Specialty` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`Value`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- RELATIONSHIPS FOR TABLE `specialty`:
+--
 
 --
 -- Dumping data for table `specialty`

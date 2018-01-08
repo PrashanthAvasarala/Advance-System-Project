@@ -19,9 +19,9 @@
        </label>     
       <br><br>
       <button (click) = "getAvailableDates(bookedDate)"> Check Availability</button>
-      <div [hidden] = "!(availableTimes && availableTimes.length)"> 
+      <div [hidden] = "!(todayAvailableTimeSlots && todayAvailableTimeSlots.length)"> 
           <br><br>         
-                <span *ngFor = "let time of availableTimes">
+                <span *ngFor = "let time of todayAvailableTimeSlots">
                     <button class="btn btn-primary btn-lg"  style = "margin-right : 10px;" (click) = "getDate(time)"> {{time | date : 'shortTime'}} </button>
                 </span>     
           <br><br>        

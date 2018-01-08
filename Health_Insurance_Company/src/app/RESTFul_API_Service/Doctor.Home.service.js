@@ -22,6 +22,10 @@ var DoctorHomeService = (function () {
         this._patientLabReportsUrl = 'http://localhost:8080/ASP/HealthDB/doctor/labReports';
         this._getDoctorProfileUrl = 'http://localhost:8080/ASP/HealthDB/doctor/doctorProfile';
         this._updateDocProfileUrl = 'http://localhost:8080/ASP/HealthDB/doctor/updateProfile';
+        this._addDocTimeSlots = 'http://localhost:8080/ASP/HealthDB/doctor/addTimeSlots';
+        this._getDocTimeSlots = 'http://localhost:8080/ASP/HealthDB/doctor/getTimeSlots';
+        this._deleteDocTimeSlot = 'http://localhost:8080/ASP/HealthDB/doctor/deleteTimeSlot';
+        this._updatePassword = 'http://localhost:8080/ASP/HealthDB/doctor/updatePassword';
         var headers = new http_1.Headers();
         headers.append('Content-Type', 'application/json');
     }
@@ -74,9 +78,55 @@ var DoctorHomeService = (function () {
         })
             .catch(this.updateDoctorProfileError);
     };
+    DoctorHomeService.prototype.addDocTimeSlots = function (entries) {
+        console.log("Total schedule before post call", entries.doctorSchedule.length);
+        return this.http.post(this._addDocTimeSlots, entries)
+            .map(function (response) {
+            return response.json();
+        })
+            .catch(this.addDocTimeSlotsError);
+    };
+    DoctorHomeService.prototype.getDocTimeSlots = function (entries) {
+        return this.http.post(this._getDocTimeSlots, entries)
+            .map(function (response) {
+            return response.json();
+        })
+            .catch(this.addDocTimeSlotsError);
+    };
+    DoctorHomeService.prototype.deleteDocTimeSlot = function (entries) {
+        console.log("Slot", entries.doctorSchedule);
+        this.options = new http_1.RequestOptions({
+            body: entries,
+            method: http_1.RequestMethod.Delete
+        });
+        return this.http.request(this._deleteDocTimeSlot, this.options)
+            .map(function (response) {
+            return response.json();
+        })
+            .catch(this.deleteDocTimeSlotsError);
+    };
+    DoctorHomeService.prototype.updatePassword = function (entries) {
+        return this.http.put(this._updatePassword, entries)
+            .map(function (response) {
+            return response.json();
+        })
+            .catch(this.credentialsUpdateError);
+    };
     DoctorHomeService.prototype.handleError = function (err) {
         console.log('this is error', err);
         return Observable_1.Observable.throw(JSON.parse(err._body).appointmentsList[0].errMessage);
+    };
+    DoctorHomeService.prototype.addDocTimeSlotsError = function (err) {
+        console.log('this is error', err);
+        return Observable_1.Observable.throw(JSON.parse(err._body).errMessage);
+    };
+    DoctorHomeService.prototype.getDocTimeSlotsError = function (err) {
+        console.log('this is error', err);
+        return Observable_1.Observable.throw(JSON.parse(err._body).errMessage);
+    };
+    DoctorHomeService.prototype.deleteDocTimeSlotsError = function (err) {
+        console.log('this is error', err);
+        return Observable_1.Observable.throw(JSON.parse(err._body).errMessage);
     };
     DoctorHomeService.prototype.doctorProfileError = function (err) {
         console.log('this is error', err);
@@ -87,6 +137,10 @@ var DoctorHomeService = (function () {
         return Observable_1.Observable.throw(JSON.parse(err._body).patientLabReports[0].errMessage);
     };
     DoctorHomeService.prototype.updateDoctorProfileError = function (err) {
+        console.log('this is update error', JSON.parse(err._body).errMessage);
+        return Observable_1.Observable.throw(JSON.parse(err._body).errMessage);
+    };
+    DoctorHomeService.prototype.credentialsUpdateError = function (err) {
         console.log('this is update error', JSON.parse(err._body).errMessage);
         return Observable_1.Observable.throw(JSON.parse(err._body).errMessage);
     };

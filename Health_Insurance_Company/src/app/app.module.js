@@ -40,6 +40,8 @@ var Doctor_Header_component_1 = require("./Doctor/Doctor_Header.component");
 var Doctor_Footer_component_1 = require("./Doctor/Doctor_Footer.component");
 var Doctor_Defualt_View_1 = require("./Doctor/Doctor_Defualt_View");
 var Doctor_Home_View_component_1 = require("./Doctor/Doctor_Home_View.component");
+var Update_Availability_component_1 = require("./Doctor/Update_Availability.component");
+var Doctor_Availability_component_1 = require("./Doctor/Doctor_Availability.component");
 /* Dependency Injection : Providers */
 var Authentication_Service_1 = require("./RESTFul_API_Service/Authentication.Service");
 var Customer_AuthGuard_1 = require("./Customer/Customer_AuthGuard");
@@ -75,7 +77,9 @@ var appRoutes = [
         path: '', canActivate: [Customer_AuthGuard_1.CustomerAuthGuard], component: Doctor_Defualt_View_1.DoctorDefaultView,
         children: [
             // From Login.component.ts it will come to  router.navigate(['home'])--> CustomerHomeView --> CustomerAuthGuard = true
-            { path: 'doctorHome/:', component: Doctor_Home_View_component_1.DoctorHomeView }
+            { path: 'doctorHome/:', component: Doctor_Home_View_component_1.DoctorHomeView },
+            { path: 'doctorHome/:id/availability', component: Doctor_Availability_component_1.DoctorAvailability },
+            { path: 'doctorHome/:id/showAvailability', component: Update_Availability_component_1.UpdateDocAvailability }
         ]
     },
     { path: '**', component: PageNotFound_component_1.PageNotFoundComponent },
@@ -120,7 +124,9 @@ AppModule = __decorate([
             Doctor_Header_component_1.DoctorHeader,
             Doctor_Footer_component_1.DoctorFooter,
             Doctor_Defualt_View_1.DoctorDefaultView,
-            Doctor_Home_View_component_1.DoctorHomeView],
+            Doctor_Home_View_component_1.DoctorHomeView,
+            Doctor_Availability_component_1.DoctorAvailability,
+            Update_Availability_component_1.UpdateDocAvailability],
         providers: [Customer_AuthGuard_1.CustomerAuthGuard,
             Authentication_Service_1.AuthenticationService,
             Customer_Home_service_1.CustomerService,

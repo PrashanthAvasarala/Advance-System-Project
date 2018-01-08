@@ -11,12 +11,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var Appointment_service_1 = require("../RESTFul_API_Service/Appointment.service");
+var Doctor_Home_service_1 = require("../RESTFul_API_Service/Doctor.Home.service");
 "use strict";
 var AppointmentModal = (function () {
-    function AppointmentModal(route, appoint) {
+    function AppointmentModal(route, appoint, doctorHomeService) {
         var _this = this;
         this.route = route;
         this.appoint = appoint;
+        this.doctorHomeService = doctorHomeService;
         //booke : string[] = ['25 11 2017' , '02 12 2017'];
         this.booke = [];
         this.blocks = [];
@@ -41,6 +43,7 @@ var AppointmentModal = (function () {
         this.map = {};
         this.availableTimes = [];
         this.errorMessage = '';
+        this.todayAvailableTimeSlots = [];
         this.appoint.getDoctorAndPaitentMemberId()
             .subscribe(function (result) {
             /* console.log(result);
@@ -53,53 +56,80 @@ var AppointmentModal = (function () {
             _this.patientCarrier = result[2];
             _this.patientData = result[3];
         });
-        this.getDoctorDates();
+        this.getDoctorBlockedDates();
+        this.getDocTimeSlots();
     }
-    /* ngAfterContentInit(){
-  
-     this.map = new Map();
-     this.myDate= new Date(2018,1,7);
-     
-     this.map.set(this.myDate,[new Date(2018,1,7,9,0).getTime() , new Date(2018,1,7,12,0).getTime() , new Date(2018,1,7,15,0).getTime()]);
-     this.map.set(new Date(2018,1,8),[new Date(2018,1,7,8,0).getTime() , new Date(2018,1,8,12,0).getTime() , new Date(2018,1,8,15,0).getTime()]);
-     this.map.set(new Date(2018,1,9),[new Date(2018,1,9,9,0).getTime() , new Date(2018,1,9,12,0).getTime() , new Date(2018,1,9,15,0).getTime()]);
-     console.log(this.map.get(this.myDate));
-    } */
-    AppointmentModal.prototype.getAvailableDates = function (dates) {
+    AppointmentModal.prototype.getDocTimeSlots = function () {
         var _this = this;
+        var docInfo = {
+            doctorMemberId: this.doctorMemberId,
+            doctorSchedule: []
+        };
+        this.doctorHomeService.getDocTimeSlots(docInfo)
+            .subscribe(function (response) {
+            _this.allDocSlots = response.doctorSchedule;
+            console.log(_this.allDocSlots);
+        }, function (error) {
+            _this.allDocSlots = [];
+            _this.errorMessage = error;
+        });
+    };
+    AppointmentModal.prototype.checkDuplicate = function (currentElement) {
+        if (currentElement.valueOf() !== this.docSlot.valueOf()) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+    AppointmentModal.prototype.getAvailableDates = function (dates) {
         this.availableTimes = [];
+        this.todayAvailableTimeSlots = [];
         this.errorMessage = '';
         /* console.log("date entered is ", dates);
-           console.log("my date", this.myDate);*/
+        console.log("my date", this.myDate);
+        console.log(dates.getMonth() + "   day " + dates.getDate()); */
         if (!dates) {
             this.errorMessage = "Please enter the date and then check Doctor's availability";
             return this.availableTimes;
         }
-        this.map = new Map();
-        this.myDate = new Date(2018, 0, 10);
-        this.map.set(this.myDate, [new Date(2018, 0, 10, 9, 0), new Date(2018, 0, 10, 12, 0), new Date(2018, 0, 10, 15, 0)]);
-        this.map.set(new Date(2018, 1, 8), [new Date(2018, 1, 8, 8, 0), new Date(2018, 1, 8, 12, 0), new Date(2018, 1, 8, 15, 0)]);
-        this.map.set(new Date(2018, 1, 9), [new Date(2018, 1, 9, 10, 0), new Date(2018, 1, 9, 12, 0), new Date(2018, 1, 9, 13, 0)]);
-        // console.log("my date", this.myDate);
-        // console.log("check in the map", this.map.get(this.myDate));
-        // console.log("check in the map", this.map.get(this.myDate));
-        // console.log("keys length", this.map.keys());
-        this.map.forEach(function (value, key) {
-            /* console.log("date entered is ", dates.getDate() , "Month entered is ", dates.getMonth() , "Hour of the day" , dates.getHours());
-               console.log("date from databse is ", key.getDate() , "Month from databse is ", key.getMonth() ); */
-            _this.errorMessage = '';
-            if (key.getDate() == dates.getDate() && key.getMonth() == dates.getMonth()) {
-                _this.availableTimes = value;
-                console.log(_this.availableTimes);
-                return _this.availableTimes;
+        if (this.allDocSlots && this.allDocSlots.length) {
+            /* var obj = { currentDate: new Date(this.selectedDate.setSeconds(0)).toISOString() };
+            let isExist = (this.docTimeSlots.length < 1) ? true : this.docTimeSlots.every(this.checkDuplicate, obj); */
+            this.availableTimes = this.allDocSlots.filter(function (arrElement) {
+                return (new Date(arrElement).getDate() == dates.getDate() && new Date(arrElement).getMonth() == dates.getMonth());
+            });
+            /*  let blocking = this.getDoctorBlockedDates();
+             let callbackDuplicate = this.checkDuplicate;
+             var todayAvailableTimeSlots = this.todayAvailableTimeSlots;
+             this.availableTimes.filter(function (element) {
+               let obj = {docSlot: new Date(element)};
+               let duplicate = blocking.every(callbackDuplicate, obj);
+               if(duplicate) {
+                 todayAvailableTimeSlots.push(element);
+               }
+             }); */
+            var that = this;
+            this.availableTimes.filter(function (element) {
+                var obj = { docSlot: new Date(element) };
+                var duplicate = that.getDoctorBlockedDates().every(that.checkDuplicate, obj);
+                if (duplicate) {
+                    that.todayAvailableTimeSlots.push(element);
+                }
+            });
+            this.todayAvailableTimeSlots = that.todayAvailableTimeSlots;
+            console.log("today available is ", this.todayAvailableTimeSlots.length);
+            if (this.todayAvailableTimeSlots.length == 0) {
+                this.errorMessage = "All slots for today are booked, please select other date";
             }
-        });
+        }
+        //console.log("length of timimgd in day",this.availableTimes);
         if (!(this.availableTimes && this.availableTimes.length)) {
             this.errorMessage = "Doctor not available on this date , please select other date";
         }
         return this.availableTimes;
     };
-    AppointmentModal.prototype.getDoctorDates = function () {
+    AppointmentModal.prototype.getDoctorBlockedDates = function () {
         var _this = this;
         var entries = {
             doctorMemberId: this.doctorMemberId
@@ -114,9 +144,11 @@ var AppointmentModal = (function () {
             }
             console.log("Blocked dates added in array", _this.blocks);
         });
+        return this.blocks;
     };
     AppointmentModal.prototype.bookAppoint = function () {
         var _this = this;
+        console.log("selected date", this.bookedDate);
         if (this.bookedDate && this.consultingReason) {
             var entries = {};
             entries = {
@@ -183,9 +215,11 @@ var AppointmentModal = (function () {
         }
     };
     AppointmentModal.prototype.getDate = function (dt) {
-        this.bookedDate = dt;
-        console.log(dt && dt.getTime());
-        return dt && dt.getTime();
+        this.bookedDate = new Date(dt);
+        console.log(dt);
+        console.log(this.bookedDate);
+        /* console.log(dt && dt.getTime()); */
+        return this.bookedDate && this.bookedDate.getTime();
     };
     return AppointmentModal;
 }());
@@ -195,7 +229,31 @@ AppointmentModal = __decorate([
         templateUrl: './Customer_MakeAppointment_Modal.html',
         styleUrls: ['./Customer_MakeAppointment_Modal.css'],
     }),
-    __metadata("design:paramtypes", [router_1.Router, Appointment_service_1.AppointmentService])
+    __metadata("design:paramtypes", [router_1.Router, Appointment_service_1.AppointmentService, Doctor_Home_service_1.DoctorHomeService])
 ], AppointmentModal);
 exports.AppointmentModal = AppointmentModal;
+/* this.map = new Map();
+   this.myDate = new Date(2018, 0, 10);
+   this.map.set(this.myDate, [new Date(2018, 0, 10, 9, 0), new Date(2018, 0, 10, 12, 0), new Date(2018, 0, 10, 15, 0)]);
+   this.map.set(new Date(2018, 1, 8), [new Date(2018, 1, 8, 8, 0), new Date(2018, 1, 8, 12, 0), new Date(2018, 1, 8, 15, 0)]);
+   this.map.set(new Date(2018, 1, 9), [new Date(2018, 1, 9, 10, 0), new Date(2018, 1, 9, 12, 0), new Date(2018, 1, 9, 13, 0)]);
+
+   console.log("my date", this.myDate);
+   console.log("check in the map", this.map.get(this.myDate));
+   console.log("check in the map", this.map.get(this.myDate));
+   console.log("keys length", this.map.keys());
+
+   
+
+   this.map.forEach((value: any, key: Date) => {
+     console.log("date entered is ", dates.getDate() , "Month entered is ", dates.getMonth() , "Hour of the day" , dates.getHours());
+        console.log("date from databse is ", key.getDate() , "Month from databse is ", key.getMonth() );
+       this.errorMessage = '';
+     if (key.getDate() == dates.getDate() && key.getMonth() == dates.getMonth()) {
+       this.availableTimes = value;
+       console.log(this.availableTimes);
+       return this.availableTimes;
+     }
+     
+   }); */ 
 //# sourceMappingURL=Customer_MakeAppointment.js.map

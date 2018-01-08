@@ -18,7 +18,7 @@ import { DoctorHomeService } from '../RESTFul_API_Service/Doctor.Home.service';
     
 })
 
-export class  DoctorProfileView {
+export class  DoctorProfileView extends CustomerAuthGuard{
 
     doctorName : any;
     doctorMemberId : any;
@@ -27,18 +27,20 @@ export class  DoctorProfileView {
     patientReviews = <any>[];
     editDocProfileMessage: string;
     hasMessage: boolean = false;
+    
 
     constructor(private route: Router, private appoint: AppointmentService , private doctorHomeService: DoctorHomeService ) {
-        
+          super(route)
+          
             this.appoint.getDoctorAndPaitentMemberId()
               .subscribe(
               (result: any) => {
                 
                 /* this.patientCarrier = result[2];
-                   this.patientData = result[3]; */
+                this.patientData = result[3]; */
                 this.doctorMemberId = result[0];
                 this.doctorName = result[1];
-                
+               
               })
             console.log(this.doctorName);
               this.DoctorProfileClicked();
@@ -46,6 +48,7 @@ export class  DoctorProfileView {
             }
 
             
+
             DoctorProfileClicked() {
                 var entries: any = {
                   doctorMemberId: this.doctorMemberId,
@@ -80,4 +83,6 @@ export class  DoctorProfileView {
                   });
                   console.log(this.patientReviews);
               };
+
+              
 }

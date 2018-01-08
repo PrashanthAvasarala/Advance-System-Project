@@ -23,7 +23,7 @@ import { ContactusComponent } from './Home/ContactUs/contactus.component';
 /* Customer-View*/
 
 import { CustomerHeader } from './Customer/Customer_Header.component';
-import { CustomerFooter}  from './Customer/Customer_Footer';
+import { CustomerFooter } from './Customer/Customer_Footer';
 import { CustomerDefaultView } from './Customer/Customer_Default_View';
 import { CustomerHomeView } from './Customer/Customer_Home_View';
 import { Appointment } from './Customer/Customer_appointment';
@@ -39,7 +39,8 @@ import { DoctorHeader } from './Doctor/Doctor_Header.component';
 import { DoctorFooter } from './Doctor/Doctor_Footer.component';
 import { DoctorDefaultView } from './Doctor/Doctor_Defualt_View';
 import { DoctorHomeView } from './Doctor/Doctor_Home_View.component';
-
+import { UpdateDocAvailability } from './Doctor/Update_Availability.component';
+import { DoctorAvailability } from './Doctor/Doctor_Availability.component';
 
 /* Dependency Injection : Providers */
 
@@ -79,12 +80,12 @@ const appRoutes: Routes = [
       { path: 'home/:id/appointment', component: Appointment },
       { path: 'home/:id/appointment/doctor-profile/:docList.memberId', component: DoctorProfileView },
       { path: 'home/:id/delete-appointment', component: DeleteAppoint },
-      { path: 'home/:id/appointment/docAppoint' , component : AppointmentModal},
-      { path: 'home/:id/appointment/docAppoint/:docId/addReview' , component : ReviewModal},
+      { path: 'home/:id/appointment/docAppoint', component: AppointmentModal },
+      { path: 'home/:id/appointment/docAppoint/:docId/addReview', component: ReviewModal },
     ]
   },
 
- 
+
 
   /* Doctor-View*/
 
@@ -92,7 +93,9 @@ const appRoutes: Routes = [
     path: '', canActivate: [CustomerAuthGuard], component: DoctorDefaultView,
     children: [
       // From Login.component.ts it will come to  router.navigate(['home'])--> CustomerHomeView --> CustomerAuthGuard = true
-      { path: 'doctorHome/:', component: DoctorHomeView }
+      { path: 'doctorHome/:', component: DoctorHomeView },
+      { path: 'doctorHome/:id/availability', component: DoctorAvailability },
+      { path: 'doctorHome/:id/showAvailability', component: UpdateDocAvailability }
     ]
   },
 
@@ -141,7 +144,9 @@ const appRoutes: Routes = [
     DoctorHeader,
     DoctorFooter,
     DoctorDefaultView,
-    DoctorHomeView],
+    DoctorHomeView,
+    DoctorAvailability,
+    UpdateDocAvailability],
 
   providers: [CustomerAuthGuard,
     AuthenticationService,

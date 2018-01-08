@@ -17,18 +17,21 @@ var core_1 = require("@angular/core");
 var Customer_AuthGuard_1 = require("../Customer/Customer_AuthGuard");
 var router_1 = require("@angular/router");
 var Doctor_Home_service_1 = require("../RESTFul_API_Service/Doctor.Home.service");
+var forms_1 = require("@angular/forms");
 var DoctorHeader = (function (_super) {
     __extends(DoctorHeader, _super);
     /* Taking the sessionstorage into Customer values from Customer_AuthGuard_ts rather declaring another variable */
-    function DoctorHeader(doctorHomeService, rout) {
+    function DoctorHeader(doctorHomeService, rout, fb) {
         var _this = _super.call(this, rout) || this;
         _this.doctorHomeService = doctorHomeService;
         _this.rout = rout;
+        _this.fb = fb;
         _this.patientAppointments = [];
         _this.patientReviews = [];
         _this.patientLabReports = [];
         _this.doctorProfile = [];
         _this.updateResponse = [];
+        _this.doctor = [];
         _this.hasMessage = false;
         _this.id = _this.customerData.memberId;
         return _this;
@@ -102,6 +105,42 @@ var DoctorHeader = (function (_super) {
             _this.hasMessage = true;
         });
     };
+    DoctorHeader.prototype.updatePasswordClicked = function () {
+        this.doctor = {
+            password: '',
+            confirmPassword: ''
+        };
+        this.passwordMatch = true;
+    };
+    DoctorHeader.prototype.passwordCheck = function (doctor) {
+        if (doctor.password === doctor.confirmPassword) {
+            return true;
+        }
+        return false;
+    };
+    DoctorHeader.prototype.updatePassword = function (event) {
+        var _this = this;
+        this.passwordMatch = this.passwordCheck(this.doctor);
+        if (this.passwordMatch) {
+            console.log("Password is ", this.doctor.password);
+            console.log("Password is ", this.doctor.confirmPassword);
+            var entries = {
+                doctorMemberId: this.customerData.memberId,
+                password: this.doctor.password
+            };
+            this.doctorHomeService.updatePassword(entries)
+                .subscribe(function (result) {
+                console.log(result);
+                _this.updatedPasswordResp = result;
+                _this.hasMessage = true;
+                result.password = "";
+                _this.passwordSuccessMsg = result.successMessage;
+            }, function (error) {
+                _this.passwordErrorMsg = error;
+                _this.hasMessage = true;
+            });
+        }
+    };
     DoctorHeader.prototype.editDoctorProfile = function (event) {
         var _this = this;
         if (!this.doctorProfile.doctorMemberId) {
@@ -160,7 +199,7 @@ DoctorHeader = __decorate([
         templateUrl: './Doctor_Header.html',
         styleUrls: ['./Doctor_Header.css']
     }),
-    __metadata("design:paramtypes", [Doctor_Home_service_1.DoctorHomeService, router_1.Router])
+    __metadata("design:paramtypes", [Doctor_Home_service_1.DoctorHomeService, router_1.Router, forms_1.FormBuilder])
 ], DoctorHeader);
 exports.DoctorHeader = DoctorHeader;
 //# sourceMappingURL=Doctor_Header.component.js.map

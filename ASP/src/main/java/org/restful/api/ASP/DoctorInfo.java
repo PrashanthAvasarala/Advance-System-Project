@@ -3,6 +3,7 @@ package org.restful.api.ASP;
 import java.util.Date;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -13,6 +14,8 @@ import javax.ws.rs.core.Response;
 import org.restful.api.database.DoctorProfileDb;
 import org.restful.api.database.PatientAppointmentsInfo;
 import org.restful.api.model.AllPatientDetails;
+import org.restful.api.model.DocCredentials;
+import org.restful.api.model.DocTimeSlots;
 import org.restful.api.model.DoctorQualifications;
 import org.restful.api.model.PatientAppointment;
 
@@ -210,4 +213,69 @@ public class DoctorInfo {
 		return (result.getSuccessMessage() != null) ? Response.status(200).entity(result).build()
 				: Response.status(500).entity(result).build();
 	}
+	
+	@Path("addTimeSlots")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addDocTimeSlots(DocTimeSlots docTimeSlots) throws Exception {
+		
+//		System.out.println("timeslots" + docTimeSlots.getDoctorSchedule().size());
+//		
+//        for (Date slot : docTimeSlots.getDoctorSchedule()) {
+//			System.out.println(slot);
+//		}
+        
+		DoctorProfileDb docInfo = new DoctorProfileDb();
+
+		 DocTimeSlots result = docInfo.addDocTimeSlots(docTimeSlots);
+		 		 
+		return (result.getSuccessMessage() != null) ? Response.status(200).entity(result).build()
+				: Response.status(500).entity(result).build();
+	}
+	
+	@Path("getTimeSlots")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getDocTimeSlots(DocTimeSlots docTimeSlots) throws Exception {
+		
+		System.out.println("timeslots" + docTimeSlots.getDoctorMemberId());
+		DoctorProfileDb docInfo = new DoctorProfileDb();
+
+		DocTimeSlots result = docInfo.getDocTimeSlots(docTimeSlots);
+		 		 
+		return (result.getDoctorSchedule().size() > 0) ? Response.status(200).entity(result).build()
+				: Response.status(500).entity(result).build();
+	}
+	
+	@Path("deleteTimeSlot")
+	@DELETE
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteDocTimeSlots(DocTimeSlots docTimeSlots) throws Exception {
+		
+		DoctorProfileDb docInfo = new DoctorProfileDb();
+		DocTimeSlots result = docInfo.deleteDocTimeSlots(docTimeSlots);
+		 		 
+		return (result.getDoctorSchedule().isEmpty()) ? Response.status(200).entity(result).build()
+				: Response.status(500).entity(result).build();
+	}
+	
+	@Path("updatePassword")
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateDocCredentials(DocCredentials docCredentials) throws Exception {
+		String encryptedPassword = EncryptAndDecryptPassword.encrypt(docCredentials.getPassword());
+		docCredentials.setEncryptedPassword(encryptedPassword);
+		
+		DoctorProfileDb docInfo = new DoctorProfileDb();
+		DocCredentials result = docInfo.updateCredentials(docCredentials);
+		 		 
+		return (result.getSuccessMessage() != null) ? Response.status(200).entity(result).build()
+				: Response.status(500).entity(result).build();
+	}
+
+   
 }

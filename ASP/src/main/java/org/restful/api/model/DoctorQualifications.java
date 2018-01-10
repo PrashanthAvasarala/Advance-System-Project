@@ -1,5 +1,7 @@
 package org.restful.api.model;
 
+import java.util.Date;
+
 public class DoctorQualifications {
 
 	private String education;
@@ -14,7 +16,50 @@ public class DoctorQualifications {
 	private String specialities;
 	private String errMessage;
 	private String successMessage;
+	private boolean profileExists;
+	private Date availableDate;
+	private String address;
+	private float docRating;
 	
+	
+	public DoctorQualifications(){
+		do{
+			docRating = (float) (Math.random()*10);
+		  }while(!(this.docRating < 5 && this.docRating > 2));
+	}
+	
+	public float getDocRating() {
+		return docRating;
+	}
+
+	public void setDocRating(float rating) {
+		this.docRating = rating;
+	}
+
+	public Date getAvailableDate() {
+		return availableDate;
+	}
+
+	public void setAvailableDate(Date availableDate) {
+		this.availableDate = availableDate;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public boolean isProfileExists() {
+		return profileExists;
+	}
+
+	public void setProfileExists(boolean profileExists) {
+		this.profileExists = profileExists;
+	}
+
 	public String getSuccessMessage() {
 		return successMessage;
 	}

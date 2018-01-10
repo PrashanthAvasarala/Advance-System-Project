@@ -65,7 +65,8 @@ public class Customer_Login {
 			 EmailAppointment.sendEmailAppointDateAndTime(profile);
 			 return Response.status(200).entity("Appointment has been booked").build();
 		}else{ 
-			return Response.status(404).entity("Appointment has been not booked , due to some other reasons").build();
+			return Response.status(404).entity("We are sorry appointment has already booked!!" +
+		                                       "Please try again for another date and time! Thank you for your patience!").build();
 			 }
 	  }
 	

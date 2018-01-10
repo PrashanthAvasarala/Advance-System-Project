@@ -93,6 +93,7 @@ public class MyResource {
 			 
 			  boolean status = DatabaseConnection.insertData(profile);
 		      if(status){
+		    	  System.out.println("entered email id"+profile.getEmail());
 		    	  EmailMemberId.sendEmailWithMemberId(profile);
 		    	  return  Response.status(200).entity("Profile has been registered !! please check your Email account for Member Id").build() ;
 		    	   }
@@ -104,6 +105,7 @@ public class MyResource {
 			  
 			  boolean status = DatabaseConnection.insertDoctorData(profile);
 			  if(status){
+				  EmailMemberId.sendEmailWithMemberId(profile);
 				  return  Response.status(200).entity("Profile has been registered !! please check your Email account for Member Id").build() ;
 			  }else{
 				  return Response.status(409).entity(profile.getErrorMsg()).build();

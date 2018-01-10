@@ -96,12 +96,15 @@ public class AppointmentsDb {
 			// Fetching List of Doctors and theirs address,availability,address
 			// and adding in the doctorsAvailablityLists
 			con = DatabaseConnection.getCon();
-			PreparedStatement pst = con.prepareStatement("select * from doctor_availability_list where member_id IN "
-					+ "(SELECT member_id FROM appointment_doctors_list where zip_code = ? AND ( disease = ? OR specialty = ? OR doctor_name = ?))");
+			/*PreparedStatement pst = con.prepareStatement("select * from doctor_availability_list where member_id IN "
+					+ "(SELECT member_id FROM appointment_doctors_list where zip_code = ? OR ( disease = ? OR specialty = ? OR doctor_name = ?))");
 			pst.setInt(1, profile.getZipcode());
 			pst.setString(2, profile.getDisease());
 			pst.setString(3, profile.getSpecialty());
-			pst.setString(4, profile.getDoctorName());
+			pst.setString(4, profile.getDoctorName());*/
+			PreparedStatement pst = con.prepareStatement("select * from doctor_availability_list where member_id IN "
+					+ "(SELECT member_id FROM doctor_table where zip_code = ? )");
+			pst.setInt(1, profile.getZipcode());
 			ResultSet rs = pst.executeQuery();
 
 			while (rs.next()) {

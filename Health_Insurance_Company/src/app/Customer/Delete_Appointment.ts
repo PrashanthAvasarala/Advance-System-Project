@@ -70,8 +70,7 @@ export class DeleteAppoint extends CustomerAuthGuard {
                   var hours =  Math.floor((this.appDate - Date.now())/(1000*60*60));
                 window.alert("You cannot cancel your appointment within 24 hours of appointment time,"+
                               "right now your have only "+ hours +
-                              "  hours,Your Appointment cannot be cancelled");
-                
+                              "  hours,Your Appointment cannot be cancelled");                
               }
 
           }else{

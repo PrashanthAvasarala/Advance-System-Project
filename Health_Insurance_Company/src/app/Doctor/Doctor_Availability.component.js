@@ -23,6 +23,7 @@ var DoctorAvailability = (function (_super) {
         var _this = _super.call(this, rout) || this;
         _this.doctorHomeService = doctorHomeService;
         _this.rout = rout;
+        _this.allDocSlots = [];
         _this.docTimeSlots = [];
         _this.start = new Date();
         _this.datepickerOpts = {
@@ -30,7 +31,7 @@ var DoctorAvailability = (function (_super) {
             todayHighlight: true, assumeNearbyYear: true,
             enableOnReadonly: false,
             format: 'd MM yyyy', icon: 'fa fa-calendar', clearBtn: false,
-            startDate: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1), showOnFocus: true,
+            startDate: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 2), showOnFocus: true,
             endDate: new Date(new Date().getFullYear(), new Date().getMonth() + 3)
         };
         //If we remove type casting <any> it will throw error
@@ -42,6 +43,7 @@ var DoctorAvailability = (function (_super) {
             defaultTime: '08:00 AM'
         };
         _this.getDocTimeSlots();
+        _this.temp = true;
         return _this;
     }
     DoctorAvailability.prototype.getDate = function (dt) {

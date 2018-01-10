@@ -1,5 +1,5 @@
 
-import { Component, Input, } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CustomerAuthGuard } from './Customer_AuthGuard';
@@ -158,7 +158,7 @@ export class AppointmentModal {
         console.log("today available is ", this.todayAvailableTimeSlots.length);
 
         if(this.todayAvailableTimeSlots.length == 0) {
-          this.errorMessage = "All slots for today are booked, please select other date";
+          this.errorMessage = "All slots of this date are booked, please select other date";
         }
      //   this.todayAvailableTimeSlots = todayAvailableTimeSlots;
         /*  console.log("Date from db",new Date(arrElement).setSeconds(0).valueOf());

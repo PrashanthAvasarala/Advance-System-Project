@@ -15,7 +15,7 @@ export class CustomerAuthGuard implements CanActivate {
     storage = <any>{}; 
     /* When TypeScript thinks that property "x" does not exist on "y", then you can always cast "y" into "any", 
     which will allow you to call anything (like "x") on "y". */
-
+    
     constructor(private router: Router) {
         /* var userData:any = sessionStorage.userData;
         this.customerData = JSON.parse(userData); */
@@ -26,6 +26,7 @@ export class CustomerAuthGuard implements CanActivate {
         // let sessionStorage = <any> {};
         // this.customerData = (sessionStorage).userData==null ? false: JSON.parse((sessionStorage).userData);
         /* this.customerData = JSON.parse(sessionStorage.userData);  */
+        
      }
 
     /* Either Local storage or session storage application is throughing error while 

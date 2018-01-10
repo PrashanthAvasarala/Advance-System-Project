@@ -120,7 +120,7 @@ var AppointmentModal = (function () {
             this.todayAvailableTimeSlots = that.todayAvailableTimeSlots;
             console.log("today available is ", this.todayAvailableTimeSlots.length);
             if (this.todayAvailableTimeSlots.length == 0) {
-                this.errorMessage = "All slots for today are booked, please select other date";
+                this.errorMessage = "All slots of this date are booked, please select other date";
             }
         }
         //console.log("length of timimgd in day",this.availableTimes);

@@ -18,14 +18,16 @@ var Customer_AuthGuard_1 = require("../Customer/Customer_AuthGuard");
 var router_1 = require("@angular/router");
 var Doctor_Home_service_1 = require("../RESTFul_API_Service/Doctor.Home.service");
 var forms_1 = require("@angular/forms");
+var Appointment_service_1 = require("../RESTFul_API_Service/Appointment.service");
 var DoctorHeader = (function (_super) {
     __extends(DoctorHeader, _super);
     /* Taking the sessionstorage into Customer values from Customer_AuthGuard_ts rather declaring another variable */
-    function DoctorHeader(doctorHomeService, rout, fb) {
+    function DoctorHeader(doctorHomeService, rout, fb, appoint) {
         var _this = _super.call(this, rout) || this;
         _this.doctorHomeService = doctorHomeService;
         _this.rout = rout;
         _this.fb = fb;
+        _this.appoint = appoint;
         _this.patientAppointments = [];
         _this.patientReviews = [];
         _this.patientLabReports = [];
@@ -33,7 +35,16 @@ var DoctorHeader = (function (_super) {
         _this.updateResponse = [];
         _this.doctor = [];
         _this.hasMessage = false;
+        _this.datepickerOpt = {
+            autoclose: true, todayBtn: 'linked',
+            todayHighlight: true, assumeNearbyYear: true,
+            format: 'd MM yyyy', icon: 'fa fa-calendar',
+            datesDisabled: _this.booke, clearBtn: false,
+            startDate: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 2), showOnFocus: true,
+            endDate: new Date(2018, 2)
+        };
         _this.id = _this.customerData.memberId;
+        _this.temp = false;
         return _this;
     }
     DoctorHeader.prototype.showPastAppointmentsClicked = function (event) {
@@ -86,6 +97,7 @@ var DoctorHeader = (function (_super) {
         this.doctorHomeService.getAppointmentsForToday(entries)
             .subscribe(function (appointments) {
             _this.patientAppointments = appointments;
+            console.log(_this.patientAppointments);
         }, function (error) {
             _this.errorMessage = error;
         });
@@ -104,6 +116,16 @@ var DoctorHeader = (function (_super) {
             _this.editDocProfileMessage = error;
             _this.hasMessage = true;
         });
+        console.log("Im from DB date", this.doctorProfile.availableDate);
+        /* this.availableDate = new Date(this.doctorProfile.availableDate); */
+        console.log("Im assigned to available  date", this.availableDate);
+        console.log("Im from DB date", new Date(this.doctorProfile.availableDate));
+        /* this.date = new Date(new Date(this.doctorProfile.availableDate) && new Date(this.doctorProfile.availableDate).getTime());
+        var userTimezoneOffset = new Date(this.doctorProfile.availableDate).getTimezoneOffset() * 60000;
+        console.log(this.date);
+        if(this.doctorProfile.availableDate){
+                  window.alert("Last Available date you have updated is: "+new Date(this.doctorProfile.availableDate));
+        } */
     };
     DoctorHeader.prototype.updatePasswordClicked = function () {
         this.doctor = {
@@ -143,6 +165,8 @@ var DoctorHeader = (function (_super) {
     };
     DoctorHeader.prototype.editDoctorProfile = function (event) {
         var _this = this;
+        console.log("hello I'm selected date ", this.availableDate);
+        this.doctorProfile.availableDate = this.availableDate;
         if (!this.doctorProfile.doctorMemberId) {
             this.doctorProfile.doctorMemberId = this.id;
             this.doctorProfile.profileExists = false;
@@ -161,7 +185,9 @@ var DoctorHeader = (function (_super) {
             languagesSpoken: this.doctorProfile.languagesSpoken,
             professionalMemberships: this.doctorProfile.professionalMemberships,
             profileExists: this.doctorProfile.profileExists,
-            specialities: this.doctorProfile.specialities
+            specialities: this.doctorProfile.specialities,
+            availableDate: this.availableDate,
+            address: this.doctorProfile.address,
         };
         this.doctorHomeService.updateDoctorProfile(entries)
             .subscribe(function (doctorQualifications) {
@@ -184,6 +210,28 @@ var DoctorHeader = (function (_super) {
         };
         return myStyles;
     };
+    DoctorHeader.prototype.differAppointment = function (id, dt) {
+        var _this = this;
+        console.log(new Date(dt).getTime());
+        var entries = {
+            doctorMemberId: this.customerData.memberId,
+            memberId: id
+        };
+        if (new Date(dt).getDate() != new Date().getDate()) {
+            this.appoint.deleteAppointment(entries)
+                .subscribe(function (result) {
+                console.log(result);
+                window.alert(result.errMessage);
+                _this.rout.navigate(['doctorHome/' + _this.customerData.memberId]);
+            });
+        }
+        else {
+            var hours = Math.floor((new Date(dt).getTime() - Date.now()) / (1000 * 60 * 60));
+            window.alert("You cannot cancel your appointment within 24 hours of appointment time," +
+                "right now your have only " + hours +
+                "  hours,Your Appointment cannot be cancelled");
+        }
+    };
     DoctorHeader.prototype.logOut = function () {
         sessionStorage.removeItem("customerData");
         //sessionStorage.removeItem("userData");
@@ -193,13 +241,17 @@ var DoctorHeader = (function (_super) {
     };
     return DoctorHeader;
 }(Customer_AuthGuard_1.CustomerAuthGuard));
+__decorate([
+    core_1.Input('temp'),
+    __metadata("design:type", Boolean)
+], DoctorHeader.prototype, "temp", void 0);
 DoctorHeader = __decorate([
     core_1.Component({
         selector: 'Doctor-Header',
         templateUrl: './Doctor_Header.html',
         styleUrls: ['./Doctor_Header.css']
     }),
-    __metadata("design:paramtypes", [Doctor_Home_service_1.DoctorHomeService, router_1.Router, forms_1.FormBuilder])
+    __metadata("design:paramtypes", [Doctor_Home_service_1.DoctorHomeService, router_1.Router, forms_1.FormBuilder, Appointment_service_1.AppointmentService])
 ], DoctorHeader);
 exports.DoctorHeader = DoctorHeader;
 //# sourceMappingURL=Doctor_Header.component.js.map

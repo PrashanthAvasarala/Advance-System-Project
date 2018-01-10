@@ -11,18 +11,18 @@ import { timeInterval } from "rxjs/operator/timeInterval";
 })
 
 export class DoctorAvailability extends CustomerAuthGuard {
-
+  temp : boolean;
     constructor(private doctorHomeService: DoctorHomeService, private rout: Router) {
         super(rout);
         this.getDocTimeSlots();
-
+        this.temp = true;
     }
 
     date: Date;
     submitCheckBox: boolean;
     currentDate: any;
-    allDocSlots: any[];
-    docTimeSlots: any[] = [];
+    allDocSlots = <any>[];
+    docTimeSlots = <any>[];
     selectedDate: Date;
     start: Date = new Date();
     errorMessage: string;
@@ -31,7 +31,7 @@ export class DoctorAvailability extends CustomerAuthGuard {
         todayHighlight: true, assumeNearbyYear: true,
         enableOnReadonly: false,
         format: 'd MM yyyy', icon: 'fa fa-calendar', clearBtn: false,
-        startDate: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1), showOnFocus: true,
+        startDate: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 2), showOnFocus: true,
         endDate: new Date(new Date().getFullYear(), new Date().getMonth() + 3)
     };
 
@@ -79,7 +79,7 @@ export class DoctorAvailability extends CustomerAuthGuard {
     }
 
     delete(slot: any) {
-        this.docTimeSlots = this.docTimeSlots.filter(arrElement => arrElement.valueOf() != slot.valueOf());
+        this.docTimeSlots = this.docTimeSlots.filter((arrElement:any) => arrElement.valueOf() != slot.valueOf());
     }
 
     getDocTimeSlots(): any {

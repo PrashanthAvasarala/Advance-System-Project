@@ -14,12 +14,13 @@ import { Observable } from "rxjs/Observable";
 })
 
 export class DoctorHomeView extends CustomerAuthGuard {
-
+   
   constructor(private doctorHomeService: DoctorHomeService, private rout: Router) {
     super(rout);
     this.getAppointmentsForToday();
     this.getAllReviews();
     this.getPatientLabReports();
+    
   }
 
   getAppointmentsForToday() {
@@ -48,6 +49,7 @@ export class DoctorHomeView extends CustomerAuthGuard {
   //     return 0;
   //   }) : null;
   // };
+    
 
   getAllReviews() {
     var entries: any = {

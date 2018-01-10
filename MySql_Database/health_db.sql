@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 09, 2018 at 12:09 AM
+-- Generation Time: Jan 10, 2018 at 10:11 AM
 -- Server version: 10.1.28-MariaDB
 -- PHP Version: 7.1.10
 
@@ -28,8 +28,6 @@ USE `health_db`;
 
 --
 -- Table structure for table `appointment_doctors_list`
---
--- Creation: Nov 09, 2017 at 01:40 AM
 --
 
 DROP TABLE IF EXISTS `appointment_doctors_list`;
@@ -68,8 +66,6 @@ INSERT INTO `appointment_doctors_list` (`member_id`, `disease`, `specialty`, `do
 
 --
 -- Table structure for table `customer_table`
---
--- Creation: Dec 06, 2017 at 08:12 AM
 --
 
 DROP TABLE IF EXISTS `customer_table`;
@@ -111,14 +107,13 @@ INSERT INTO `customer_table` (`member_id`, `role`, `first_name`, `last_name`, `a
 (66785, 'customer', 'Sandeep ', 'Avasarala', 25, 8166210680, '64 Surrey Way', 'Exton', 19341, 'PA', 'sandeep92.avasarala@gmail.com', 'piNVOpZ4xMejP1Z3GrI4xA=='),
 (60404, 'customer', 'Satya Phani', 'Meduri', 28, 6210681223, '53 Heritage Ln', 'Exton', 19341, 'PA', 'satya.28@gmail.com', 'Bs4qGAJZqNXubjooj2Zalg=='),
 (66853, 'customer', 'sdc', 'sad', 56, 7894561230, 's', 'mo', 89654, 'mo', 'k@3.com', 'EF4iCowaY6oslnnTN65Etw=='),
-(65151, 'customer', 'Sravan', 'Vanga', 26, 6060121789, '23 Avenue St', 'Malvern', 64093, 'PA', 'sravan.kpf@gmail.com', 'ofM6d1qkbSYVLMQb3lJuMA==');
+(65151, 'customer', 'Sravan', 'Vanga', 26, 6060121789, '23 Avenue St', 'Malvern', 64093, 'PA', 'sravan.kpf@gmail.com', 'ofM6d1qkbSYVLMQb3lJuMA=='),
+(62888, 'customer', 'vishnuvardhan', 'Sheelam', 23, 1234567890, '48 drewes ct', 'nj', 86482, 'nj', 'svreddy8055@gmail.com', 'NSY+uglXnZJDjMQS0GcSyg==');
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `doctor_availability_list`
---
--- Creation: Dec 06, 2017 at 07:08 AM
 --
 
 DROP TABLE IF EXISTS `doctor_availability_list`;
@@ -151,14 +146,13 @@ INSERT INTO `doctor_availability_list` (`member_id`, `first_name`, `rating`, `ad
 (61504, 'Dr. David M Trantham', 5, '5501 Old York Road,Lee Summit,MO - 64785.', '2017-12-06'),
 (65730, 'Dr. Xavier Antony', 3.5, 'Saint Lukes Cardiovascular Conslts, 407 E Russell Ave, Warrensburg, MO - 64093.', '2017-12-06'),
 (68500, 'Dr. Lauren A Kanter', 3, '9411 N Oak Trfy,Warrensburg, MO - 64093.', '2017-12-06'),
-(69544, 'Dr. Arthur E Perpall', 4.5, '603 East Gaines Cir, Warrensburg, MO - 64093.', '2017-12-06');
+(69544, 'Dr.Arthur E Perpall', 3.83132, '603 East Gaines Cir, Warrensburg, MO - 64093.', '2018-01-30'),
+(69687, 'Dr.Vishnu Reddy', 4.0442, 'Saint Lukes Cardiovascular Conslts, 407 E Russell Ave, Warrensburg, MO - 64093.', '2018-01-23');
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `doctor_calendar`
---
--- Creation: Jan 08, 2018 at 05:27 AM
 --
 
 DROP TABLE IF EXISTS `doctor_calendar`;
@@ -177,6 +171,8 @@ CREATE TABLE IF NOT EXISTS `doctor_calendar` (
 --
 
 INSERT INTO `doctor_calendar` (`member_id`, `timeslot`) VALUES
+(60000, '2018-01-11 11:00:00'),
+(60000, '2018-01-25 11:00:00'),
 (65730, '2018-01-07 08:15:00'),
 (65730, '2018-01-07 08:30:00'),
 (65730, '2018-01-09 18:15:00'),
@@ -197,14 +193,13 @@ INSERT INTO `doctor_calendar` (`member_id`, `timeslot`) VALUES
 (69544, '2018-01-31 09:00:00'),
 (69544, '2018-01-31 11:00:00'),
 (69544, '2018-02-01 10:00:00'),
-(69544, '2018-03-03 10:00:00');
+(69544, '2018-03-03 10:00:00'),
+(69687, '2018-01-18 11:00:00');
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `doctor_profile`
---
--- Creation: Nov 28, 2017 at 10:29 AM
 --
 
 DROP TABLE IF EXISTS `doctor_profile`;
@@ -234,14 +229,13 @@ INSERT INTO `doctor_profile` (`doctor_member_id`, `first_name`, `last_name`, `ed
 (12345, 'Sandeep Updated', 'Avasarala Venkata', 'M.s, Btech', 'Paoli Hospital', 'English', 'American Academy of Family Physicians', 'American Board of Family Medicine', 'Aetna', 'Family Physician'),
 (61302, 'Tu', 'Dinh', 'Medical School - New York University, Doctor of Medicine\r\nColumbia University (Bachelor’s)\r\nUniversity of Miami Hospital, Internship in Internal Medicine\r\nUniversity of Miami Hospital, Residency in Internal Medicine\r\nUniversity of Miami Hospital, Fellowship in Medical Oncology', 'Einstein Medical Center Philadelphia', 'English , Latino , Hindi', 'American Academy of Optometrist', 'American Board of Internal Medicine,\r\nMedical Oncology (Internal Medicine)', 'Caterpillar, Anthem Blue Cross Blue Shield ,First Health Insurance , Companion Life - Worker\'s Comp ,Triple-S Salud: Blue Cross Blue Shield of Puerto Rico', 'Optometrist , Eye'),
 (65730, 'Xavier', 'Antony', 'Medical School - State University of New York, Downstate Medical Center, Doctor of Medicine Long Island College Hospital (Residency)NewYork-Presbyterian Hospital / Columbia University Medical Center (Fellowship)Columbia-Presbyterian Medical Center, Fellowship in Rheumatic Diseases', 'Golden Valley Memorial Hospital', 'English , Spanish , French , Hindi', 'American Academy of Wound Care Specialist', 'New York Academy of Medicine', 'American Healthcare Alliance , First Health Insurance , First Choice Health - PPO, Wellmark Blue Cross Blue Shield , Independence Blue Cross - National BlueCard PPO', 'Wound Care Specialist'),
-(69544, 'Arthur E', 'Perpall', 'Medical School - A.T. Still University, Mesa, Doctor of Osteopathic Medicine\r\nSouthern Colorado Family Medicine, Residency in Family Medicine', 'Paoli Hospital', 'English , Russian', 'American Academy of Family Physicians', 'American Board of Internal Medicine', 'Aetna, First Health Insurance , Independence Blue Cross - National BlueCard PPO,WEA Trust - Fox River Network  Tier one Providers', 'Family Physician ');
+(69544, 'Arthur E', 'Perpall', 'Medical School - A.T. Still University, Mesa, Doctor of Osteopathic Medicine\r\nSouthern Colorado Family Medicine, Residency in Family Medicine', 'Paoli Hospital', 'English , Russian', 'American Academy of Family Physicians', 'American Board of Internal Medicine', 'Aetna, First Health Insurance , Independence Blue Cross - National BlueCard PPO,WEA Trust - Fox River Network  Tier one Providers', 'Family Physician '),
+(69687, 'Vishnu', 'Reddy', 's', 's', 's', 'ss ss', 'sgsg sgsg', 's', 'shsh shsh');
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `doctor_table`
---
--- Creation: Dec 06, 2017 at 08:36 AM
 --
 
 DROP TABLE IF EXISTS `doctor_table`;
@@ -270,6 +264,7 @@ INSERT INTO `doctor_table` (`member_id`, `role`, `first_name`, `last_name`, `spe
 (68500, 'doctor', 'Lauren A', 'Kanter', 'Emergency Medicine Physicians', 7860545889, 64093, 'Kanter.A.Lauren456@gmail.com', 'OhMWtJAAgHP8TOBgkkjhHQ=='),
 (69544, 'doctor', 'Arthur E', 'Perpall', 'Emergency Medicine Physicians', 7865405889, 64093, 'Arthur.E.Perpall852@gmail.com', 'PQiznHqIiywBhwd9/Pb+2g=='),
 (63679, 'doctor', 'kishore', 'hari', 'Neurologist', 7894563210, 64093, 'kishore.hari@gmail.com', '5rr5XQHo3M7psf04tHeXcQ=='),
+(69687, 'doctor', 'Vishnu', 'Reddy', 'Infectious Disease Specialist', 7896541230, 12345, 'prashanth.avc@gmail.com', 'EF4iCowaY6oslnnTN65Etw=='),
 (61300, 'doctor', 'Diana', 'Ries', 'Optometrist', 8169247856, 19341, 'Diana456@gmail.com', 'yqDAeh7vp9AFmWHLf3M8og=='),
 (61302, 'doctor', 'Tu', 'Dinh', 'Optometrist', 8169427856, 19341, 'Dinh.Tu123@gmail.com', 'NCU0RyvqOgXbQl6ixFfMoA=='),
 (65730, 'doctor', 'Xavier', 'Antony', 'Wound Care Specialist', 8790464822, 64093, 'Xavier.INR@gmail.com', 'Q3puCXzemOCHLAN1KV3RGw=='),
@@ -281,15 +276,13 @@ INSERT INTO `doctor_table` (`member_id`, `role`, `first_name`, `last_name`, `spe
 --
 -- Table structure for table `email_notifications`
 --
--- Creation: Nov 14, 2017 at 10:45 PM
---
 
 DROP TABLE IF EXISTS `email_notifications`;
 CREATE TABLE IF NOT EXISTS `email_notifications` (
   `serial_number` int(11) NOT NULL AUTO_INCREMENT,
   `email_id` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   UNIQUE KEY `serial_number` (`serial_number`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- RELATIONSHIPS FOR TABLE `email_notifications`:
@@ -315,14 +308,13 @@ INSERT INTO `email_notifications` (`serial_number`, `email_id`) VALUES
 (17, '@gmail.com'),
 (18, 'g@gmail.com'),
 (19, 'harishsai1993@gmail.com'),
-(20, 'nareshdeti55@gmail.com');
+(20, 'nareshdeti55@gmail.com'),
+(21, 'vishnuvardhanreddysheelam@gmail.com');
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `patient_appointments`
---
--- Creation: Jan 05, 2018 at 07:11 AM
 --
 
 DROP TABLE IF EXISTS `patient_appointments`;
@@ -361,9 +353,9 @@ INSERT INTO `patient_appointments` (`member_id`, `first_name`, `last_name`, `con
 (66777, 'Rahul', 'Sayini', '9064567890', 'First Health Insurance', '2017-12-11 14:30:00', 'Cosultation/General Follow up about Leg Sprain. Follow Up after Minor Surgery', 69544),
 (66788, 'Dileep', 'Thallapally', '8790464822', 'First Health Insurance', '2017-12-12 16:29:00', 'Minor Surgery on Retina', 61300),
 (61431, 'Deepthi', 'Chowdary', '8163720480', 'First Health Insurance', '2017-12-20 09:00:00', 'Pain in heart and heart broken coz of life partner.', 61302),
-(63236, 'Chaitanya Prashanth', 'Avasarala Venkata', '8163725650', 'Caterpillar - Caterpillar Network Plan', '2018-01-09 18:15:00', 'fhjn', 65730),
 (63236, 'Chaitanya Prashanth', 'Avasarala Venkata', '8163725650', 'WEA Trust - Fox River Network: Tier 1 Providers', '2018-01-10 15:00:00', 'jmb', 61300),
-(67860, 'Saitej', 'Vadlamani', '4442310680', 'WEA Trust - Fox River Network: Tier 1 Providers', '2018-01-11 08:00:00', 'gjkv', 65730),
+(67860, 'Saitej', 'Vadlamani', '4442310680', 'WEA Trust - Fox River Network: Tier 1 Providers', '2018-01-10 17:00:00', 'hjh', 65730),
+(63236, 'Chaitanya Prashanth', 'Avasarala Venkata', '8163725650', 'Caterpillar - Caterpillar Network Plan', '2018-01-15 12:00:00', 'gjl', 69687),
 (66785, 'Sandeep', 'Venkata', '8790464822', 'First Health Insurance', '2018-01-18 12:30:00', 'Minor Surgery about Pinkeye, also called conjunctivitis. It is a common childhood illness. Pinkeye usually makes the whites of your eyes turn red.', 69544),
 (66787, 'Sravan', 'Reddy Reva', '8790464822', 'First Health Insurance', '2018-01-18 17:00:00', 'Cosultation/General Follow up about Leg Sprain', 69544),
 (63236, 'Chaitanya Prashanth', 'Avasarala Venkata', '8163725650', 'Companion Life - Worker\'s Comp', '2018-01-25 11:00:00', 'fhmj', 69544),
@@ -376,8 +368,6 @@ INSERT INTO `patient_appointments` (`member_id`, `first_name`, `last_name`, `con
 
 --
 -- Table structure for table `patient_lab_reports`
---
--- Creation: Dec 06, 2017 at 11:46 AM
 --
 
 DROP TABLE IF EXISTS `patient_lab_reports`;
@@ -409,8 +399,6 @@ INSERT INTO `patient_lab_reports` (`member_id`, `doctor_member_id`, `date`, `typ
 --
 -- Table structure for table `patient_reviews`
 --
--- Creation: Nov 28, 2017 at 09:47 AM
---
 
 DROP TABLE IF EXISTS `patient_reviews`;
 CREATE TABLE IF NOT EXISTS `patient_reviews` (
@@ -432,6 +420,7 @@ CREATE TABLE IF NOT EXISTS `patient_reviews` (
 
 INSERT INTO `patient_reviews` (`member_id`, `doctor_member_id`, `review`, `review_date`, `rating`) VALUES
 (61431, 69544, 'Treatment was good , But little wait time.\nUsed very sophisticated instruments', '2017-12-05 00:00:00', 3.44444),
+(63236, 61302, 'gsjhhjjsjs', '2017-12-01 21:49:00', 3.6),
 (63236, 65730, 'Good Bedside manner and Doctor timing is punctual .prescribed correct medication.', '2017-11-30 09:38:15', 3.5),
 (63236, 69544, 'wer', '2018-01-05 03:18:04', 1.33333),
 (66775, 69544, 'I am very active and with that has come my share of mishaps. Dr Mastey explains exactly what is wrong and how we are going to repair. I sincerely trust him, his medical knowledge and his judgment. The entire staff is friendly and makes you feel at ease even through some not-so-easy time.', '2017-11-27 08:45:00', 3.5),
@@ -445,8 +434,6 @@ INSERT INTO `patient_reviews` (`member_id`, `doctor_member_id`, `review`, `revie
 
 --
 -- Table structure for table `specialty`
---
--- Creation: Nov 01, 2017 at 07:38 PM
 --
 
 DROP TABLE IF EXISTS `specialty`;

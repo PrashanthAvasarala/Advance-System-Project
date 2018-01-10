@@ -101,7 +101,12 @@
 
 <router-outlet></router-outlet>
 
-
+<div [hidden] = "temp" class="alert alert-danger fade in" style = "width: 1000px; margin-left: 150px;">
+    <a href = "#"  class="close" data-dismiss="alert">&times;</a>
+    <strong>Mandatory :</strong>
+     You need to update your next availability in  profile section of Settings.
+     If you don't upadate your next availablity, you are not visible to Patients for  booking appointments with you.
+</div>
 <!-- Modal View for More Appointments -->
 <div id="pastAppointments" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
@@ -122,6 +127,7 @@
                 <th class="col-md-3"> Patient Name </th>
                 <th class="col-md-3"> Date </th>
                 <th class="col-md-6"> Reason </th>
+                <th class="col-md-6"> Action </th>
               </tr>
             </thead>
 
@@ -130,6 +136,9 @@
                 <td class="col-md-3"> {{appointment.patientName}} </td>
                 <td class="col-md-3"> {{appointment.dateFromDb | date:'medium'}} </td>
                 <td class="col-md-6"> {{appointment.reason}} </td>
+                <td class="col-md-3">
+                   <button type = "button" class="btn btn-info" (click) = "differAppointment(appointment.memberId,appointment.dateFromDb)"> Differ </button> 
+                </td>
               </tr>
             </tbody>
 
@@ -368,8 +377,11 @@
       </div>
 
       <div class="modal-body" style="overflow-x: hidden; overflow-y: auto; max-height:35em;">
-
+        <p [hidden] = "!this.doctorProfile.availableDate">  Your next availability date last upadated is :  {{ this.doctorProfile.availableDate | date: "longDate"}}</p>
         <div class="container">
+            <label for="specialties">Date Available Up to :</label>
+            <datetime   [(ngModel)]="availableDate" [timepicker]="false" [datepicker]= "datepickerOpt" [hasClearButton]="false"></datetime>
+          <br>
           <form (ngSubmit)="editDoctorProfile()" #docProfile="ngForm">
             <div class="form-group">
               <label for="firstname">First Name</label>
@@ -424,12 +436,21 @@
             <div class="form-group">
               <label for="specialties">Specialties</label>
               <input type="text" class="form-control" id="specialties" [(ngModel)]="doctorProfile.specialities" name="specialities" pattern="([a-zA-Z]+(\s[a-zA-Z])).*"
-                required>
+                required>                
             </div>
 
-            <button type="submit" class="btn btn-success" [disabled]="!docProfile.form.valid || hasError">Submit</button>
+            <div class="form-group">
+              <label for="specialties">Hospital Address</label>
+              <input type="text" class="form-control" id="address" [(ngModel)] = "doctorProfile.address" name="address" pattern="^[\w\s-,.]+$"
+                required>                
+            </div>
+            <button type="submit" class="btn btn-success" [disabled]="!((docProfile.form.valid || hasError) &&  availableDate)">Submit</button>
             <button type="submit" class="btn btn-default" data-dismiss="modal">Cancel</button>
           </form>
+            
+            
+          
+          
         </div>
 
 

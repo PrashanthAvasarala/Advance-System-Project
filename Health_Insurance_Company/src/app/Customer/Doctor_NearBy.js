@@ -17,15 +17,18 @@ var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var Customer_AuthGuard_1 = require("./Customer_AuthGuard");
 var Appointment_service_1 = require("../RESTFul_API_Service/Appointment.service");
+var Doctor_Home_service_1 = require("../RESTFul_API_Service/Doctor.Home.service");
 "use strict";
 var DoctorNearBy = (function (_super) {
     __extends(DoctorNearBy, _super);
-    function DoctorNearBy(rout, apponit) {
+    function DoctorNearBy(rout, apponit, doctorHomeService) {
         var _this = _super.call(this, rout) || this;
         _this.rout = rout;
         _this.apponit = apponit;
+        _this.doctorHomeService = doctorHomeService;
         _this.message = null;
         _this.docList = [];
+        _this.insuranceCarrier = [];
         return _this;
     }
     DoctorNearBy.prototype.pointer = function () {
@@ -60,13 +63,17 @@ __decorate([
     core_1.Input(),
     __metadata("design:type", Object)
 ], DoctorNearBy.prototype, "carrier", void 0);
+__decorate([
+    core_1.Input('id'),
+    __metadata("design:type", Object)
+], DoctorNearBy.prototype, "docMemberId", void 0);
 DoctorNearBy = __decorate([
     core_1.Component({
         selector: 'doctor-nearBy',
         templateUrl: './doctor_nearBy.html',
         styleUrls: ['./doctor_nearBy.css'],
     }),
-    __metadata("design:paramtypes", [router_1.Router, Appointment_service_1.AppointmentService])
+    __metadata("design:paramtypes", [router_1.Router, Appointment_service_1.AppointmentService, Doctor_Home_service_1.DoctorHomeService])
 ], DoctorNearBy);
 exports.DoctorNearBy = DoctorNearBy;
 //# sourceMappingURL=Doctor_NearBy.js.map

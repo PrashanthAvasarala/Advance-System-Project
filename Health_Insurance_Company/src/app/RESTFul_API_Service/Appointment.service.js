@@ -119,6 +119,12 @@ var AppointmentService = (function () {
             return response.json();
         });
     };
+    AppointmentService.prototype.getZipCodes = function () {
+        return this.http.get("http://localhost:8080/ASP/HealthDB/customer/getAllZipCodes")
+            .map(function (response) {
+            return response.json();
+        });
+    };
     return AppointmentService;
 }());
 AppointmentService = __decorate([

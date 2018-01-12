@@ -27,6 +27,7 @@ export class  DoctorProfileView extends CustomerAuthGuard{
     patientReviews = <any>[];
     editDocProfileMessage: string;
     hasMessage: boolean = false;
+    patientCarrier : any;
     
 
     constructor(private route: Router, private appoint: AppointmentService , private doctorHomeService: DoctorHomeService ) {
@@ -36,13 +37,14 @@ export class  DoctorProfileView extends CustomerAuthGuard{
               .subscribe(
               (result: any) => {
                 
-                /* this.patientCarrier = result[2];
-                this.patientData = result[3]; */
+                this.patientCarrier = result[2];
+                /* this.patientData = result[3]; */
                 this.doctorMemberId = result[0];
                 this.doctorName = result[1];
                
               })
             console.log(this.doctorName);
+              window.scrollTo(0,50);
               this.DoctorProfileClicked();
               this.ShowReviewsClicked();
             }
@@ -84,5 +86,12 @@ export class  DoctorProfileView extends CustomerAuthGuard{
                   console.log(this.patientReviews);
               };
 
-              
+              bookAppointmentPage() : any{
+                this.appoint.setDoctorAndPaitentDetails(this.doctorMemberId,this.doctorName,this.patientCarrier,this.customerData);
+                this.route.navigate(['home/'+this.customerData.memberId+'/appointment/docAppoint'],{ queryParams: { doc_id: this.doctorMemberId} } );
+              }
+
+              backToAppointments(){
+                this.route.navigate(['home/'+this.customerData.memberId+'/appointment']);
+              }
 }

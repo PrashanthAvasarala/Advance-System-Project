@@ -27,7 +27,7 @@ var AppointmentModal = (function () {
             todayHighlight: true, assumeNearbyYear: true,
             format: 'd MM yyyy', icon: 'fa fa-calendar',
             datesDisabled: this.booke, clearBtn: false,
-            startDate: new Date(), showOnFocus: true,
+            startDate: new Date(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 2)), showOnFocus: true,
             endDate: new Date(2018, 2)
         };
         //If we remove type casting <any> it will throw error

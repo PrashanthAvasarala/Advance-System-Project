@@ -17,12 +17,12 @@ import { AppointmentService } from '../RESTFul_API_Service/Appointment.service';
 
 export class Appointment {
 
-    pinState:{pin: number , state: string }[] =[ {pin:19341, state:"PA"}, {pin:78954, state:"PA"}, {pin:78960 , state:"PA"} , {pin:19300, state:"PA"},
-                                                 {pin:64052, state:"MO"}, {pin:64785, state:"MO"}, {pin:64097 , state:"MO"} , {pin:64093, state:"MO"},  ];
+   /*  pinState:{pin: number , state: string }[] =[ {pin:19341, state:"PA"}, {pin:78954, state:"PA"}, {pin:78960 , state:"PA"} , {pin:19300, state:"PA"},
+                                                 {pin:64052, state:"MO"}, {pin:64785, state:"MO"}, {pin:64097 , state:"MO"} , {pin:64093, state:"MO"},  ]; */
     
     searchForm: FormGroup;
     reasonList :String[];
-    doctorsList : any[];
+    doctorsList = <any>[];
     errorMessage : string;
 
     /* Reason to hard code the values but not fetching from database is Career names will be know to everyone */
@@ -39,10 +39,11 @@ export class Appointment {
                                   "Corvel - Group Health",
                                   "irst Health Insurance"];
                                  
-
+    zip = <any>[];
     constructor(private fb: FormBuilder , private CustmService : CustomerService , private appointservice : AppointmentService){
         this.showForm();
         this.getListOfReasonsAndDoctors();
+        this.allZipCodes();
     }
 
     
@@ -54,7 +55,7 @@ export class Appointment {
         this.searchForm = this.fb.group({
 
                   reason: ['', Validators.required], // Validation for reason
-                  zipcode: ['', Validators.required],  // Validation for zipcode
+                  zipcode : ['',Validators.compose([Validators.required,Validators.pattern('([1-9]{1}?\\d{4})+')])],
                   carrier: ['', Validators.required],  // Validation for carrier
 
                 });
@@ -83,26 +84,36 @@ export class Appointment {
             specialty : this.searchForm.get('reason').value,
             doctorName : this.searchForm.get('reason').value,
             zipcode : this.searchForm.get('zipcode').value,
+            patientCarrier : this.searchForm.get('carrier').value,
+
         }
         
         this.appointservice.getDoctorsList(entries)
           .subscribe(
             (result:any)=>{
                 console.log("I'm in Appointment class ",result);
+                this.doctorsList = [];
                 this.doctorsList = result;
                 this.errorMessage = null;
-                                            
+                window.scrollTo(0,800);                                            
             },
             (err: any) => {
                 
                 this.errorMessage = err;
                 this.doctorsList = null;
                 this.searchForm.reset(); // Error rises for member Id and password because they doesn't exist in database or while subscribing from Authentication service
+                window.scrollTo(0, 500);
               } 
-          )
-          
-        
-        
+          )        
     }
+
+    allZipCodes() {
+        this.appointservice.getZipCodes()
+            .subscribe(
+                (result:any)=>{
+                  console.log("I'm getting all zipcodes ",result);   
+                  this.zip = result.zipcodes;            
+                })
+     }
 
 }

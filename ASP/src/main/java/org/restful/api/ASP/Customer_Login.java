@@ -46,9 +46,11 @@ public class Customer_Login {
 	public Response getDoctorsList(DoctorsProfile profile) throws Exception {
 
 		AllPatientDetails appointment = new AllPatientDetails();
+		
 		appointment.setDoctorsAvailablityList(AppointmentsDb.getListOfDoctors(profile));
 		return (appointment.getDoctorsAvailablityList().get(0).getErrMsg() == null)
 				? Response.status(200).entity(appointment).build() : Response.status(404).entity(appointment).build();
+		
 	}
 	
 	
@@ -117,6 +119,21 @@ public class Customer_Login {
 		public Response blockedAppoitments(PatientAppointment profile) throws Exception {
 			
 		 PatientAppointment appoint =  AppointmentsDb.blockedAppoint(profile);
+		 
+			return(appoint.getErrMessage() == null )?		
+				
+				 Response.status(200).entity(appoint).build() : Response.status(400).entity(appoint).build();
+			
+					     
+		  }
+	 
+	 @Path("getAllZipCodes")
+	 @GET
+		
+		//API for deleting appointment for selected doctor and for selected date
+		public Response getZipcodes() throws Exception {
+			
+		 PatientAppointment appoint =  AppointmentsDb.allZipCodes();
 		 
 			return(appoint.getErrMessage() == null )?		
 				

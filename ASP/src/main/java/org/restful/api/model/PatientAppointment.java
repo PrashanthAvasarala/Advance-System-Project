@@ -5,8 +5,11 @@ package org.restful.api.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -32,10 +35,19 @@ public class PatientAppointment {
 	private String doctorName;
 	private String email;
 	private List<Date> listOfBlockedDates;
+	private Set<Integer> zipcodes = new HashSet<Integer>();
 	
 	
 	
 	
+	
+	
+	public Set<Integer> getZipcodes() {
+		return zipcodes;
+	}
+	public void setZipcodes(Set<Integer> zipcodes) {
+		this.zipcodes = zipcodes;
+	}
 	
 	public List<Date> getListOfBlockedDates() {
 		return listOfBlockedDates;

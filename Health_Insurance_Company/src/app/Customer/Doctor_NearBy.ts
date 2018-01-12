@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { RatingModule } from 'ng2-rating';
 import { CustomerAuthGuard } from './Customer_AuthGuard';
 import { AppointmentService } from '../RESTFul_API_Service/Appointment.service';
+import { DoctorHomeService } from '../RESTFul_API_Service/Doctor.Home.service';
 
 
 
@@ -21,13 +22,17 @@ export class DoctorNearBy extends CustomerAuthGuard {
     @Input('errMsg') message: string = null;
     @Input('elementList') docList = <any>[];
     @Input() carrier:any;
+    network : string;
+    insuranceCarrier = <any>[];
+    @Input('id') docMemberId :any;
     
     
     
     
 
-    constructor(private rout: Router , private apponit : AppointmentService) {
-        super(rout);  
+    constructor(private rout: Router , private apponit : AppointmentService , private doctorHomeService: DoctorHomeService) {
+        super(rout);        
+               
           }      
 
      
@@ -53,10 +58,8 @@ export class DoctorNearBy extends CustomerAuthGuard {
 
           }
         
+         
           
-
-
-      
         
 }
 

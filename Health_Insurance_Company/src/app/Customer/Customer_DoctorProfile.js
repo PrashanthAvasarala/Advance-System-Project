@@ -32,12 +32,13 @@ var DoctorProfileView = (function (_super) {
         _this.hasMessage = false;
         _this.appoint.getDoctorAndPaitentMemberId()
             .subscribe(function (result) {
-            /* this.patientCarrier = result[2];
-            this.patientData = result[3]; */
+            _this.patientCarrier = result[2];
+            /* this.patientData = result[3]; */
             _this.doctorMemberId = result[0];
             _this.doctorName = result[1];
         });
         console.log(_this.doctorName);
+        window.scrollTo(0, 50);
         _this.DoctorProfileClicked();
         _this.ShowReviewsClicked();
         return _this;
@@ -75,6 +76,13 @@ var DoctorProfileView = (function (_super) {
         console.log(this.patientReviews);
     };
     ;
+    DoctorProfileView.prototype.bookAppointmentPage = function () {
+        this.appoint.setDoctorAndPaitentDetails(this.doctorMemberId, this.doctorName, this.patientCarrier, this.customerData);
+        this.route.navigate(['home/' + this.customerData.memberId + '/appointment/docAppoint'], { queryParams: { doc_id: this.doctorMemberId } });
+    };
+    DoctorProfileView.prototype.backToAppointments = function () {
+        this.route.navigate(['home/' + this.customerData.memberId + '/appointment']);
+    };
     return DoctorProfileView;
 }(Customer_AuthGuard_1.CustomerAuthGuard));
 DoctorProfileView = __decorate([

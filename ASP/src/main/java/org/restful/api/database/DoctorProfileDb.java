@@ -200,7 +200,7 @@ public class DoctorProfileDb {
 
 			if (totalCount == docTimeSlots.getDoctorSchedule().size()) {
 				docTimeSlots.setSuccessMessage(
-						"Success! All of your available timings are added and are availble for patients to schedule");
+						"Success! All of your available timings are added and are available for patients to schedule");
 			} else {
 				docTimeSlots.setErrorMessage(
 						"There was some error while updating your profile, please try again laterorMessage");

@@ -18,12 +18,37 @@ public class DoctorsProfile {
 	private Date availbleDate;
 	private String errMsg ;
 	private int memberId;
+	private List<String> insuranceCarrier = new ArrayList<String>();
+	private String patientCarrier;
+	private String network;
 	
 	
 	
 	
 	
-	
+	public String getNetwork() {
+		
+		return network;
+	}
+	public void setNetwork(String network) {
+		this.network = network;
+	}
+	public String getPatientCarrier() {
+		return patientCarrier;
+	}
+	public void setPatientCarrier(String patientCarrier) {
+		
+		
+		this.patientCarrier = patientCarrier;
+		
+		
+	}
+	public List<String> getInsuranceCarrier() {
+		return insuranceCarrier;
+	}
+	public void setInsuranceCarrier(List<String> insuranceCarrier) {
+		this.insuranceCarrier = insuranceCarrier;
+	}
 	public int getMemberId() {
 		return memberId;
 	}

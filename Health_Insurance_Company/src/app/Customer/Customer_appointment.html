@@ -28,10 +28,16 @@
 
                         <input id ="txt"  type="text" list = "zipcode"   formControlName="zipcode" placeholder="Zip code">
                         <datalist id="zipcode">
-                            <option  *ngFor = "let zip of pinState"  value= '{{zip.pin}}'></option>                           
-                       </datalist>
+                            <option  *ngFor = "let pin of zip"  [value]= 'pin'></option>                           
+                        </datalist>
+                        <!-- <select class="form-control" id="zipcode" formControlName="zipcode" placeholder="Zip code">
+                                <option value="default">--Select a Zipcode--</option>
+                                <option *ngFor = "let pin of zip" value="pin"> {{pin}}</option>
+                        </select> -->
+                        
 
-                        <p *ngIf="(searchForm.get('zipcode').hasError('required') && searchForm.get('zipcode').touched )"> Please select or enter ,the ZipCode </p>
+                        <p *ngIf="searchForm.get('zipcode').hasError('pattern')"> Please enter a valid 5 digit zip code </p> 
+                        <!-- <p *ngIf="searchForm.get('zipcode').touched"> Please select or enter ,the ZipCode </p> -->
 
                          <!--  Career Field ,id = 'txt' for CSS purpose -->
                          <!-- Reason to hard code the values but not fetching from database is Zipcode will be know to everyone  -->
@@ -39,7 +45,7 @@
                         <input id = "txt"  type="text" list = "carrier" formControlName="carrier" placeholder="Please select your carrier" >
                         <datalist id="carrier">
                             <option selected>I'll pay by Myself</option>
-                            <option *ngFor="let carrier of listOfcarriers" value="{{carrier}}"></option>
+                            <option *ngFor="let carrier of listOfcarriers" [value]="carrier"></option>
                         </datalist>
 
                         <!-- Search button will be enabled after touching both the Doctor and zip fields -->
@@ -61,8 +67,15 @@
 
 </section>
 <!-- Combine divison ends here -->
+<p [hidden] = "!(doctorsList && doctorsList.length)" style = "font-style: italic;font-size: 200%;margin-left : 120px;">
+   <strong> 
+       Based on your search criteria,You found {{ doctorsList.length }} doctors in your location
+  </strong>
+</p>
 <doctor-nearBy *ngIf = "errorMessage != null" [errMsg] = "errorMessage"> </doctor-nearBy>
-<doctor-nearBy *ngFor = "let list of doctorsList" [elementList] = "list" [carrier] = "searchForm.get('carrier').value"> </doctor-nearBy>
+<doctor-nearBy *ngFor = "let list of doctorsList" [elementList] = "list" 
+               [carrier] = "searchForm.get('carrier').value" [id]= "list.memberId"> 
+</doctor-nearBy>
 
 
 

@@ -176,7 +176,10 @@ export class DoctorHeader extends CustomerAuthGuard {
           this.updatedPasswordResp = result;
           this.hasMessage = true;
           result.password = "";
+          this.doctor.password = "";
+          this.doctor.confirmPassword = "";
           this.passwordSuccessMsg = result.successMessage;
+          window.alert(this.passwordSuccessMsg);
         },
         error => {
           this.passwordErrorMsg = <any>error;
@@ -253,7 +256,8 @@ export class DoctorHeader extends CustomerAuthGuard {
                          (result : any) => {
                              console.log(result);
                              window.alert(result.errMessage);
-                             this.rout.navigate(['doctorHome/'+this.customerData.memberId]);
+                             location.reload(true);
+                             /* this.rout.navigate(['doctorHome/'+this.customerData.memberId]); */
                              }
                      );
                 

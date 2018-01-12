@@ -2,13 +2,25 @@
 
 
 
-  <h1>{{ doctorName }}</h1>
+ 
+      <h1> {{ doctorName }} 
+         <span>
+           &nbsp;
+           &nbsp;
+            <button type="button"  class="btn btn-success"  (click) = "bookAppointmentPage()"> Select Date</button>   
+            <button type="button"  class="btn btn-primary"  (click) = "backToAppointments()"> Go Back</button>   
+         </span>
+      </h1> 
+      <br>
+      
+  
 
 
 <br>
 
 <div class="modal-body" style="overflow-x: hidden; overflow-y: auto; height:35em;">
     <h3 id = "experience"> {{profileModalTitle[0]}} </h3>
+    
   <ng-container *ngIf=" (doctorProfile) && (doctorProfile.length != 0); else emptyAppointments">
 
     <table class="table">

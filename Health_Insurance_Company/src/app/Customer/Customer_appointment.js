@@ -18,8 +18,7 @@ var Appointment = (function () {
         this.fb = fb;
         this.CustmService = CustmService;
         this.appointservice = appointservice;
-        this.pinState = [{ pin: 19341, state: "PA" }, { pin: 78954, state: "PA" }, { pin: 78960, state: "PA" }, { pin: 19300, state: "PA" },
-            { pin: 64052, state: "MO" }, { pin: 64785, state: "MO" }, { pin: 64097, state: "MO" }, { pin: 64093, state: "MO" },];
+        this.doctorsList = [];
         /* Reason to hard code the values but not fetching from database is Career names will be know to everyone */
         this.listOfcarriers = ["First Health Insurance",
             "First Choice Health - PPO",
@@ -33,13 +32,15 @@ var Appointment = (function () {
             "Caterpillar - Caterpillar Network Plan",
             "Corvel - Group Health",
             "irst Health Insurance"];
+        this.zip = [];
         this.showForm();
         this.getListOfReasonsAndDoctors();
+        this.allZipCodes();
     }
     Appointment.prototype.showForm = function () {
         this.searchForm = this.fb.group({
             reason: ['', forms_1.Validators.required],
-            zipcode: ['', forms_1.Validators.required],
+            zipcode: ['', forms_1.Validators.compose([forms_1.Validators.required, forms_1.Validators.pattern('([1-9]{1}?\\d{4})+')])],
             carrier: ['', forms_1.Validators.required],
         });
     };
@@ -62,16 +63,28 @@ var Appointment = (function () {
             specialty: this.searchForm.get('reason').value,
             doctorName: this.searchForm.get('reason').value,
             zipcode: this.searchForm.get('zipcode').value,
+            patientCarrier: this.searchForm.get('carrier').value,
         };
         this.appointservice.getDoctorsList(entries)
             .subscribe(function (result) {
             console.log("I'm in Appointment class ", result);
+            _this.doctorsList = [];
             _this.doctorsList = result;
             _this.errorMessage = null;
+            window.scrollTo(0, 800);
         }, function (err) {
             _this.errorMessage = err;
             _this.doctorsList = null;
             _this.searchForm.reset(); // Error rises for member Id and password because they doesn't exist in database or while subscribing from Authentication service
+            window.scrollTo(0, 500);
+        });
+    };
+    Appointment.prototype.allZipCodes = function () {
+        var _this = this;
+        this.appointservice.getZipCodes()
+            .subscribe(function (result) {
+            console.log("I'm getting all zipcodes ", result);
+            _this.zip = result.zipcodes;
         });
     };
     return Appointment;

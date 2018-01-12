@@ -7,9 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.TimeZone;
 
 
@@ -90,6 +92,8 @@ public class AppointmentsDb {
 	public static List<DoctorsProfile> getListOfDoctors(DoctorsProfile profile) throws Exception {
 
 		List<DoctorsProfile> doctorsAvailablityList = new ArrayList<DoctorsProfile>();
+		String patientCarrier = profile.getPatientCarrier();
+		ResultSet rsOne,rsTwo;
 
 		try {
 
@@ -105,15 +109,41 @@ public class AppointmentsDb {
 			PreparedStatement pst = con.prepareStatement("select * from doctor_availability_list where member_id IN "
 					+ "(SELECT member_id FROM doctor_table where zip_code = ? )");
 			pst.setInt(1, profile.getZipcode());
-			ResultSet rs = pst.executeQuery();
+			rsOne = pst.executeQuery();
 
-			while (rs.next()) {
+			while (rsOne.next()) {
 				DoctorsProfile dp = new DoctorsProfile();
-				dp.setDoctorName(rs.getString("first_name"));
-				dp.setRating(rs.getFloat("rating"));
-				dp.setAddress(rs.getString("address"));
-				dp.setAvailbleDate(rs.getDate("available_date"));
-				dp.setMemberId(rs.getInt("member_id"));				
+				dp.setDoctorName(rsOne.getString("first_name"));
+				dp.setRating(rsOne.getFloat("rating"));
+				dp.setAddress(rsOne.getString("address"));
+				dp.setAvailbleDate(rsOne.getDate("available_date"));
+				dp.setMemberId(rsOne.getInt("member_id"));	
+				pst = con.prepareStatement("SELECT affliated_insurance  FROM health_db.doctor_profile where doctor_member_id=?");
+				pst.setInt(1, dp.getMemberId());
+				rsTwo = pst.executeQuery();
+				  while(rsTwo.next()){
+					  StringTokenizer tokenizer = new StringTokenizer(rsTwo.getString("affliated_insurance"), ",");
+					  List<String> s = new ArrayList<String>();
+					  while(tokenizer.hasMoreTokens()){
+					   s.add(tokenizer.nextToken().trim());
+					  }
+					  dp.setInsuranceCarrier(s);
+					  System.out.println(s);
+				  }
+				  dp.setPatientCarrier(patientCarrier);
+				  if( dp.getInsuranceCarrier().isEmpty()){
+					  dp.setNetwork("Out Network");
+				  }else{
+					  for(String temp : dp.getInsuranceCarrier()){
+				          if(temp.equals(patientCarrier)){
+				        	  dp.setNetwork("In Network");
+				        	  break;
+				          }else{
+				        	  dp.setNetwork("Out of Network");
+				          }
+					  }
+				  }
+					     
 				doctorsAvailablityList.add(dp);
 				System.out.println(dp.getDoctorName());
 			}
@@ -124,7 +154,7 @@ public class AppointmentsDb {
 				doctorsAvailablityList.add(profile);
 				return doctorsAvailablityList;
 			} else {
-				rs.close();
+				rsOne.close();
 				pst.close();
 				con.close();
 				return doctorsAvailablityList;
@@ -481,6 +511,36 @@ public class AppointmentsDb {
     }
     
     
-    
+    public static PatientAppointment allZipCodes() throws Exception{
+    	
+	      
+	      Set<Integer> zipCodes = new HashSet<>();
+	      PatientAppointment patientAppoint = new PatientAppointment();
+	  
+	      try {
+             	 con = DatabaseConnection.getCon();
+	             PreparedStatement pst = con.prepareStatement("select zip_code FROM doctor_table ");
+	             ResultSet rs = pst.executeQuery();	
+	             
+	             while(rs.next()){
+	        	
+	        	   zipCodes.add(rs.getInt("zip_code"));
+	        	   
+	             }
+	             
+	             patientAppoint.setZipcodes(zipCodes);
+		  
+         }catch (SQLException e) {				
+			     System.err.println("Got an exception!! in doctor_table ");
+			     //System.err.println(profile.getDate());
+		         System.err.println(e.getMessage());			    
+		      }
+	  
+	      
+	      
+	return patientAppoint;
+	
+}
+
     
 }

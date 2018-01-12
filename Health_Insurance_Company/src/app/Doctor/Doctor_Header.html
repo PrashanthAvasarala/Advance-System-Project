@@ -24,7 +24,7 @@
                   Past Appointments </a>
               </li>
               <li>
-                <a [ngStyle]="pointer()" data-toggle="modal" data-target="#pastAppointments" (click)="ShowAppointmentsForTodayClicked($event)">
+                <a [ngStyle]="pointer()" data-toggle="modal" data-target="#moreAppointments" (click)="ShowAppointmentsForTodayClicked($event)">
                   More Appointments </a>
               </li>
             </ul>
@@ -127,7 +127,6 @@
                 <th class="col-md-3"> Patient Name </th>
                 <th class="col-md-3"> Date </th>
                 <th class="col-md-6"> Reason </th>
-                <th class="col-md-6"> Action </th>
               </tr>
             </thead>
 
@@ -136,9 +135,6 @@
                 <td class="col-md-3"> {{appointment.patientName}} </td>
                 <td class="col-md-3"> {{appointment.dateFromDb | date:'medium'}} </td>
                 <td class="col-md-6"> {{appointment.reason}} </td>
-                <td class="col-md-3">
-                   <button type = "button" class="btn btn-info" (click) = "differAppointment(appointment.memberId,appointment.dateFromDb)"> Differ </button> 
-                </td>
               </tr>
             </tbody>
 
@@ -161,6 +157,60 @@
   </div>
 </div>
 
+<!-- Modal View for More Appointments -->
+<div id="moreAppointments" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+  
+        <div class="modal-header" style="background-color: #f7f7f7; padding-bottom: 0px;">
+          <h2 class="modal-title"> {{modalTitle}} </h2>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+  
+        <div class="modal-body" style="overflow-x: hidden; overflow-y: auto; height:35em;">
+          <ng-container *ngIf="patientAppointments && patientAppointments.length; else emptymoreAppointments">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="col-md-3"> Patient Name </th>
+                  <th class="col-md-3"> Date </th>
+                  <th class="col-md-6"> Reason </th>
+                  <th class="col-md-6"> Action </th>
+                </tr>
+              </thead>
+  
+              <tbody>
+                <tr *ngFor="let appointment of patientAppointments">
+                  <td class="col-md-3"> {{appointment.patientName}} </td>
+                  <td class="col-md-3"> {{appointment.dateFromDb | date:'medium'}} </td>
+                  <td class="col-md-6"> {{appointment.reason}} </td>
+                  <td class="col-md-3">
+                     <button type = "button" class="btn btn-info" (click) = "differAppointment(appointment.memberId,appointment.dateFromDb)"> Cancel </button> 
+                  </td>
+                </tr>
+              </tbody>
+  
+            </table>
+          </ng-container>
+  
+          <ng-template #emptymoreAppointments>
+            <h2> No patient has schedule appointment with you </h2>
+          </ng-template>
+  
+  
+          <!-- </div> -->
+  
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
 
 <!-- Modal View for Reviews -->
 <div id="patientReviews" class="modal fade" role="dialog">
@@ -379,7 +429,7 @@
       <div class="modal-body" style="overflow-x: hidden; overflow-y: auto; max-height:35em;">
         <p [hidden] = "!this.doctorProfile.availableDate">  Your next availability date last upadated is :  {{ this.doctorProfile.availableDate | date: "longDate"}}</p>
         <div class="container">
-            <label for="specialties">Date Available Up to :</label>
+            <label for="specialties">Date Available from :</label>
             <datetime   [(ngModel)]="availableDate" [timepicker]="false" [datepicker]= "datepickerOpt" [hasClearButton]="false"></datetime>
           <br>
           <form (ngSubmit)="editDoctorProfile()" #docProfile="ngForm">

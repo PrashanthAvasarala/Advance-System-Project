@@ -156,7 +156,10 @@ var DoctorHeader = (function (_super) {
                 _this.updatedPasswordResp = result;
                 _this.hasMessage = true;
                 result.password = "";
+                _this.doctor.password = "";
+                _this.doctor.confirmPassword = "";
                 _this.passwordSuccessMsg = result.successMessage;
+                window.alert(_this.passwordSuccessMsg);
             }, function (error) {
                 _this.passwordErrorMsg = error;
                 _this.hasMessage = true;
@@ -211,7 +214,6 @@ var DoctorHeader = (function (_super) {
         return myStyles;
     };
     DoctorHeader.prototype.differAppointment = function (id, dt) {
-        var _this = this;
         console.log(new Date(dt).getTime());
         var entries = {
             doctorMemberId: this.customerData.memberId,
@@ -222,7 +224,8 @@ var DoctorHeader = (function (_super) {
                 .subscribe(function (result) {
                 console.log(result);
                 window.alert(result.errMessage);
-                _this.rout.navigate(['doctorHome/' + _this.customerData.memberId]);
+                location.reload(true);
+                /* this.rout.navigate(['doctorHome/'+this.customerData.memberId]); */
             });
         }
         else {

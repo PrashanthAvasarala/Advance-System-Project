@@ -166,6 +166,13 @@ export class AppointmentService {
 
       }
 
-      
+      getZipCodes() : any {
+        return this.http.get("http://localhost:8080/ASP/HealthDB/customer/getAllZipCodes")
+        .map(
+          (response:Response) => {
+                return response.json();
+          }
+        )
+      }
         
 }

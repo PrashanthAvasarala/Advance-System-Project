@@ -125,7 +125,7 @@ export class AppointmentService {
       }
 
 
-      listOfAppointments(data : any) : Observable<Response>{
+      listOfAppointment(data : any) : Observable<Response>{
 
         return this.http.post("http://localhost:8080/ASP/HealthDB/customer/patientAppointmentList",data)
         .map(

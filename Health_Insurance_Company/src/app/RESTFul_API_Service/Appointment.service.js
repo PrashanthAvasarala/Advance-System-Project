@@ -93,7 +93,7 @@ var AppointmentService = (function () {
             return (error.status === 404) ? Rx_1.Observable.throw(error._body) : null;
         });
     };
-    AppointmentService.prototype.listOfAppointment = function (data) {
+    AppointmentService.prototype.listOfAppointments = function (data) {
         return this.http.post("http://localhost:8080/ASP/HealthDB/customer/patientAppointmentList", data)
             .map(function (response) {
             return response.json();
